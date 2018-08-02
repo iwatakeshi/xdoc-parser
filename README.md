@@ -64,7 +64,7 @@ const XDocASTGenerator = xdoc.core.XDocASTGenerator;
 const XDocASTVisitor = xdoc.core.XDocASTVisitor;
 
 const generate = (source) => new XDocASTGenerator(source).generate();
-const parse = (source: string) => new XDocASTVisitor(generate(source)).visit();
+const parse = (source) => new XDocASTVisitor(generate(source)).visit();
 const ast = parse('@tag id: type - description {@inline description}');
 console.log(JSON.stringify(ast, null, 2));
 ```
