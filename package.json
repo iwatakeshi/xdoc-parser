@@ -1,6 +1,6 @@
 {
   "name": "xdoc-parser",
-  "version": "1.1.0",
+  "version": "2.0.0",
   "description": "An XDoc comment parser.",
   "main": "index.js",
   "directories": {
