@@ -82,10 +82,9 @@ export default class XDocParser {
     return node && node.type === "heading" && node.children[0].value.toLowerCase() === "api";
   }
   private parseXDoc = (node) => {
-    node['xdoc'] = (new XDocASTVisitor(this.options.visitor)
-      .visit(
-        (new XDocASTGenerator(node.value)).generate()
-      )
+    const documentation = (new XDocASTGenerator(node.value)).generate();
+    node['xdoc'] = (new XDocASTVisitor(documentation, this.options.visitor)
+      .visit()
     );
     return node;
   }

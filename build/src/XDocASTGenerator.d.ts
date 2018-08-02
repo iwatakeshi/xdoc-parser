@@ -8,7 +8,7 @@ import { XDocSyntaxParser, DocumentationContext } from "./XDocSyntaxParser";
  * @class XDocASTParser
  * ```
  */
-export default class XDocASTParser {
+export default class XDocASTGenerator {
     private parser_;
     /**
      * Creates a XDocASTParser object.

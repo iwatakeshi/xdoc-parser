@@ -60,11 +60,11 @@ You may also access the core parser class (or other classes) and simply parse th
 
 ```js
 const xdoc = require('xdoc-parser')
-const XDocASTParser = xdoc.core.XDocASTParser;
 const XDocASTGenerator = xdoc.core.XDocASTGenerator;
+const XDocASTVisitor = xdoc.core.XDocASTVisitor;
 
-const generate = (source) => new XDocASTParser(source).generate();
-const parse = (source) => new XDocASTGenerator().visit(generate(source));
+const generate = (source) => new XDocASTGenerator(source).generate();
+const parse = (source: string) => new XDocASTVisitor(generate(source)).visit();
 const ast = parse('@tag id: type - description {@inline description}');
 console.log(JSON.stringify(ast, null, 2));
 ```

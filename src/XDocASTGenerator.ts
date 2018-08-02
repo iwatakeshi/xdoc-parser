@@ -12,7 +12,7 @@ import { ANTLRInputStream } from "antlr4ts/ANTLRInputStream";
  * @class XDocASTParser
  * ```
  */
-export default class XDocASTParser {
+export default class XDocASTGenerator {
   private parser_: XDocSyntaxParser
   /**
    * Creates a XDocASTParser object.

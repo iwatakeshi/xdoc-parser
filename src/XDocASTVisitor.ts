@@ -79,12 +79,14 @@ export interface XDocASTVisitorOptions {
  * ```
  */
 export default class XDocASTVisitor {
+  private documentation: Parser.DocumentationContext
   private options: XDocASTVisitorOptions = {
     showNodeText: false
   }
 
-  constructor(options?: XDocASTVisitorOptions) {
+  constructor(documentation: Parser.DocumentationContext, options?: XDocASTVisitorOptions) {
     Object.assign(this.options, options);
+    this.documentation = documentation;
   }
   /**
    * Converts the Antlr parse tree into a JavaScript tree object.
@@ -103,8 +105,8 @@ export default class XDocASTVisitor {
    * }[]
    * ```
    */
-  visit = (context: Parser.DocumentationContext): DocumentationNode => {
-    return this.visitDocumentation(context);
+  visit = (): DocumentationNode => {
+    return this.visitDocumentation(this.documentation);
   }
   /* Documentation visitor */
 
