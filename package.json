@@ -12,6 +12,7 @@
     "remark": "^9.0.0"
   },
   "devDependencies": {
+    "@semantic-release/changelog": "^3.0.0",
     "@semantic-release/git": "^7.0.1",
     "@semantic-release/github": "^5.0.1",
     "@semantic-release/npm": "^4.0.2",
@@ -69,7 +70,9 @@
       "@semantic-release/github"
     ],
     "prepare": [
-      "@semantic-release/npm"
+      "@semantic-release/changelog",
+      "@semantic-release/npm",
+      "@semantic-release/git"
     ],
     "publish": [
       "@semantic-release/npm",
