@@ -1,12 +1,12 @@
 import * as chai from 'chai';
 import XDocASTVisitor from "../src/XDocASTVisitor";
-import XDocASTParser from '../src/XDocASTGenerator';
+import XDocASTGenerator from '../src/XDocASTGenerator';
 import { createDocumentationNode, createTagNode, createTagNameNode, createIdentifierNode, createBodyNode, TagNode, DocumentationNode, createDescriptionNode, createTagIdentifierNode, createTypeNode, createPrimaryTypeNode, createUnionTypeNode, createIntersectTypeNode, createLambdaTypeNode, createParameterNode, createFormalParemeterSequenceNode, createTupleTypeNode, createParenthesizedTypeNode, createUnaryTypeNode, createPropertyIdentifierNode, createObjectTypeNode, createObjectPairTypeNode, createArrayTypeNode, createExpressionNode, createLiteralExpressionNode, createUnaryExpressionNode, createBinaryExpressionNode, createArrayExpressionNode, createObjectExpressionNode, createObjectPairExpressionNode, createLambdaExpressionNode, createParenthesizedExpressioneNode, createInlineTagNode } from '../src/XDocASTNode';
 import * as FS from 'fs';
 
 /* Helpers */
 const equal = chai.assert.deepEqual;
-const ast = (source) => new XDocASTParser(source).generate();
+const ast = (source) => new XDocASTGenerator(source).generate();
 const parse = (source) => new XDocASTVisitor().visit(ast(source));
 
 const documentation = (annotations: TagNode[]): DocumentationNode => createDocumentationNode(
