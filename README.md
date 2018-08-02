@@ -2,6 +2,7 @@
 
 [![Build Status](https://travis-ci.org/iwatakeshi/xdoc-parser.svg?branch=master)](https://travis-ci.org/iwatakeshi/xdoc-parser)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fiwatakeshi%2Fxdoc-parser.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fiwatakeshi%2Fxdoc-parser?ref=badge_shield)
 
 An XDoc comment parser.
 
@@ -91,3 +92,6 @@ Second, `XDocCommentParser.ts` strips out anything within a comment block. At th
 ///
 ...
 ```
+
+## License
+[![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fiwatakeshi%2Fxdoc-parser.svg?type=large)](https://app.fossa.io/projects/git%2Bgithub.com%2Fiwatakeshi%2Fxdoc-parser?ref=badge_large)
