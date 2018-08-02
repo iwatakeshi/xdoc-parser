@@ -1,13 +1,13 @@
 import * as FS from "fs";
 import * as chai from 'chai';
-import XDocMarkdownParser from '../src/XDocParser';
+import XDocParser from '../src/XDocParser';
 import { TagNode, DocumentationNode, createDocumentationNode, createBodyNode, createTagNameNode, createIdentifierNode, createTagIdentifierNode, createTagNode } from "../src/XDocASTNode";
 
 /* Helpers */
 const equal = chai.assert.deepEqual;
 const source = FS.readFileSync(`${process.cwd()}/test/markdown.comment.txt`, 'utf-8');
-const parseMarkdown = (source: string) => (new XDocMarkdownParser(source).parse());
-const getCode = () => parseMarkdown(source).map(ast => {
+const xdoc = (source: string) => (new XDocParser(source).parse());
+const getCode = () => xdoc(source).map(ast => {
   let code = ast.children.filter(node => node.type === 'code')[0];
   return code;
 })[0];
