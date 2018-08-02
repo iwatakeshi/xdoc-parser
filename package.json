@@ -1,6 +1,6 @@
 {
   "name": "xdoc-parser",
-  "version": "1.0.0",
+  "version": "0.0.0-development",
   "description": "An XDoc comment parser.",
   "main": "index.js",
   "directories": {
@@ -20,7 +20,7 @@
     "commitizen": "^2.10.1",
     "cz-adapter-eslint": "^0.1.2",
     "mocha": "^5.2.0",
-    "semantic-release": "^15.8.1",
+    "semantic-release": "^15.9.3",
     "shelljs": "^0.8.2",
     "travis-deploy-once": "^5.0.1",
     "ts-node": "^7.0.0",
@@ -29,7 +29,9 @@
   "scripts": {
     "test": "mocha -r ts-node/register test/*.ts",
     "commit": "git-cz",
-    "build": "node scripts/build.js"
+    "build": "node scripts/build.js",
+    "travis-deploy-once": "travis-deploy-once",
+    "semantic-release": "semantic-release pre && npm publish && semantic-release post"
   },
   "repository": {
     "type": "git",
