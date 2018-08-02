@@ -12,6 +12,8 @@
     "remark": "^9.0.0"
   },
   "devDependencies": {
+    "@semantic-release/github": "^5.0.1",
+    "@semantic-release/npm": "^4.0.2",
     "@types/chai": "^4.1.4",
     "@types/mocha": "^5.2.5",
     "@types/node": "^10.5.3",
@@ -59,6 +61,10 @@
   "release": {
     "analyzeCommits": {
       "preset": "eslint"
-    }
+    },
+    "verifyConditions": ["@semantic-release/npm", "@semantic-release/git", "@semantic-release/github"],
+    "prepare": ["@semantic-release/npm"],
+    "publish": ["@semantic-release/npm", "@semantic-release/github"],
+    "npmPublish": false
   }
 }
