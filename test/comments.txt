@@ -1,0 +1,51 @@
+$SINGLE_HASH_COMMENT$
+
+# Title
+
+func random() {
+
+}
+
+$ SINGLE_STAR_COMMENT $
+
+/*
+  Title
+*/
+  
+func random() {
+
+}
+
+$ DOUBLE_STAR_COMMENT $
+
+/**
+ * Title 
+ */
+
+func random() {
+
+}
+
+$ DOUBLE_SLASH_COMMENT $
+
+// Title
+
+func random() {
+
+}
+
+$ TRIPLE_SLASH_COMMENT $
+
+/// Title
+
+func random() {
+
+}
+
+$ TRIPLE_QUOTE_COMMENT $
+
+""" Title """
+
+func random() {
+
+}

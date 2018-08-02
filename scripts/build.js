@@ -31,7 +31,7 @@ if (shell.exec('cd grammar/ && antlr4ts -visitor *.g4 && mv *.ts *.tokens ../src
 // shell.sed('-i', /setType\(RETURNTAG\)/g, 'this.type = TomLexer.RETURNTAG', 'src/tom/TomLexer.ts');
 
 // Modify the parser
-shell.sed('-i', /@RuleVersion\(0\)/g, '', 'src/XDocParser.ts');
+shell.sed('-i', /@RuleVersion\(0\)/g, '', 'src/XDocSyntaxParser.ts');
 
 // Compile the Typescript files
 shell.echo('[xdoc-parser]: Building TypeScript files...');

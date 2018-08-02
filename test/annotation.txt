@@ -1,0 +1,9 @@
+@function myHero
+@param name: string = "Deku" - The name of a hero.
+@param age: number = 15 - The age of a hero.
+@param strength: number = 100 - The strength of a hero.
+@return: {
+  name: string,
+  age: number,
+  strength: number
+}
