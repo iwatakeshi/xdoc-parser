@@ -1,5 +1,8 @@
-const XDocParser = require('./build/src/').XDocParser;
-const XDoc = require('./build/src/');
+import XDocParser, { XDocParserOptions } from './src/XDocParser';
+
+// const XDocParser = require('./build/src/').XDocParser;
+// const XDoc = require('./build/src/');
+import * as XDoc from './src/';
 
 /**
  * Returns an instance of XDocParser.
@@ -23,10 +26,14 @@ const XDoc = require('./build/src/');
  * }
  * ```
  */
-function xdoc(source, options = {}) {
+function xdoc(source, options: XDocParserOptions) {
   return (new XDocParser(source, options))
 }
 
 // Exports
-xdoc['core'] = XDoc;
+Object.defineProperty(xdoc, 'core', {
+  value: XDoc,
+  writable: false
+});
+
 module.exports = xdoc;

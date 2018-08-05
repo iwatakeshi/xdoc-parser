@@ -3,11 +3,11 @@ const { assert } = chai;
 
 describe('XDoc Exports', () => {
   it('should export a function', () => {
-    assert.isFunction(require(`${process.cwd()}/index.js`));
+    assert.isFunction(require(`${process.cwd()}/build/index.js`));
   })
 
   it('should export the core classes', () => {
-    let xdoc = require(`${process.cwd()}/index.js`)
+    let xdoc = require(`${process.cwd()}/build/index.js`)
     assert.exists(xdoc.core)
     assert.exists(xdoc.core.XDocParser);
     assert.exists(xdoc.core.XDocASTNode);
