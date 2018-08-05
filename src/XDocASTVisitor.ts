@@ -62,6 +62,9 @@ import {
   PropertyIdentifierNode,
   ParenthesizedTypeNode,
   createParenthesizedExpressioneNode,
+  PrimaryTypeNode,
+  UnaryTypeNode,
+  ObjectTypeNode,
 } from './XDocASTNode';
 
 
@@ -105,14 +108,14 @@ export default class XDocASTVisitor {
    * }[]
    * ```
    */
-  visit = (): DocumentationNode => {
+  visit = (): Partial<DocumentationNode> => {
     return this.visitDocumentation(this.documentation);
   }
   /* Documentation visitor */
 
   visitDocumentation = (
     context: Parser.DocumentationContext
-  ): DocumentationNode => {
+  ): Partial<DocumentationNode> => {
     if (context.body()) {
       return createDocumentationNode(
         this.visitBody(context.body()),
@@ -123,7 +126,7 @@ export default class XDocASTVisitor {
 
   visitBody = (
     context: Parser.BodyContext
-  ): BodyNode => {
+  ): Partial<BodyNode> => {
     if (context.annotations()) {
       return createBodyNode(
         this.visitAnnotations(context.annotations(), this.options),
@@ -135,19 +138,19 @@ export default class XDocASTVisitor {
   visitAnnotations = (
     context: Parser.AnnotationsContext,
     options: XDocASTVisitorOptions
-  ): AnnotationsNode => {
+  ): Partial<AnnotationsNode> => {
     if (context.tag()) {
       return (context.tag() || []).map(this.visitTag)
     }
   }
 
 
-  visitTag = (context: Parser.TagContext): TagNode => {
-    let name: TagNameNode,
-      identifier: TagIdentifierNode,
-      type: TypeNode,
-      expression: ExpressionNode,
-      description: DescriptionNode;
+  visitTag = (context: Parser.TagContext): Partial<TagNode> => {
+    let name: Partial<TagNameNode>,
+      identifier: Partial<TagIdentifierNode>,
+      type: Partial<TypeNode>,
+      expression: Partial<ExpressionNode>,
+      description: Partial<DescriptionNode>;
 
     if (context.tagName()) {
       name = this.visitTagName(context.tagName());
@@ -172,15 +175,15 @@ export default class XDocASTVisitor {
     return createTagNode(name, identifier, type, expression, description, this.options.showNodeText ? context.text : undefined)
   }
 
-  visitTagName = (context: Parser.TagNameContext): TagNameNode => {
+  visitTagName = (context: Parser.TagNameContext): Partial<TagNameNode> => {
     if (context.identifier()) {
       return createTagNameNode(this.visitIdentifier(context.identifier()), this.options.showNodeText ? context.text : undefined);
     }
   }
 
-  visitTagIdentifier = (context: Parser.TagIdentifierContext): TagIdentifierNode => {
-    let identifier: IdentifierNode | OptionalIdentifierNode,
-      property: PropertyTagIdentifierNode;
+  visitTagIdentifier = (context: Parser.TagIdentifierContext): Partial<TagIdentifierNode> => {
+    let identifier: Partial<IdentifierNode> | Partial<OptionalIdentifierNode>,
+      property: Partial<PropertyTagIdentifierNode>;
     if (context.identifier()) {
       identifier = this.visitIdentifier(context.identifier());
     }
@@ -196,7 +199,7 @@ export default class XDocASTVisitor {
     return createTagIdentifierNode(identifier, property, this.options.showNodeText ? context.text : undefined);
   }
 
-  visitPropertyTagIdentifier = (context: Parser.PropertyTagIdentifierContext): PropertyTagIdentifierNode => {
+  visitPropertyTagIdentifier = (context: Parser.PropertyTagIdentifierContext): Partial<PropertyTagIdentifierNode> => {
 
     // Assume 'context' is defined.
     let identifier = context.identifier() ?
@@ -211,13 +214,13 @@ export default class XDocASTVisitor {
     return createPropertyTagIdentifierNode(property, context.text);
   }
 
-  visitOptionalTagIdentifer = (context: Parser.OptionalTagIdentifierContext): OptionalTagIdentifierNode => {
+  visitOptionalTagIdentifer = (context: Parser.OptionalTagIdentifierContext): Partial<OptionalTagIdentifierNode> => {
     if (context.optionalIdentifier()) {
       return createOptionalTagIdentifierNode(this.visitOptionalIdentifier(context.optionalIdentifier()))
     }
   }
 
-  visitOptionalTagOrIdentifier = (context: Parser.OptionalTagOrIdentifierContext): (IdentifierNode | OptionalIdentifierNode) => {
+  visitOptionalTagOrIdentifier = (context: Parser.OptionalTagOrIdentifierContext): (Partial<IdentifierNode> | Partial<OptionalIdentifierNode>) => {
     if (context.identifier()) {
       return this.visitIdentifier(context.identifier())
     }
@@ -228,7 +231,7 @@ export default class XDocASTVisitor {
   }
 
 
-  visitIdentifier = (context: Parser.IdentifierContext, optional = false): IdentifierNode => {
+  visitIdentifier = (context: Parser.IdentifierContext, optional = false): Partial<IdentifierNode> => {
     if (context.ID()) {
       return createIdentifierNode(context.ID().text, optional, []);
     }
@@ -236,7 +239,7 @@ export default class XDocASTVisitor {
 
   /* Type visitor */
 
-  visitType = (context: Parser.TypeContext | Parser.NotArrayTypeContext, optional = false): TypeNode => {
+  visitType = (context: Parser.TypeContext | Parser.NotArrayTypeContext, optional = false): Partial<TypeNode> => {
 
     // Intersections
     if (context.PIPE()) {
@@ -322,7 +325,7 @@ export default class XDocASTVisitor {
 
   /* Lambda visitor */
 
-  visitLambdaType = (context: Parser.LambdaTypeContext): LambdaTypeNode => {
+  visitLambdaType = (context: Parser.LambdaTypeContext): Partial<LambdaTypeNode> => {
     if (context.formalParameterSequence()) {
       return createLambdaTypeNode(
         this.visitLambdaFormalParameterSequence(context.formalParameterSequence()),
@@ -345,20 +348,20 @@ export default class XDocASTVisitor {
     )
   }
 
-  visitLambdaFormalParameterSequence = (context: Parser.FormalParameterSequenceContext | Parser.ParameterContext): FormalParameterSequenceNode => {
+  visitLambdaFormalParameterSequence = (context: Parser.FormalParameterSequenceContext | Parser.ParameterContext): Partial<FormalParameterSequenceNode> => {
     if (context instanceof Parser.ParameterContext) {
       return createFormalParemeterSequenceNode([this.visitParameter(context)])
     }
     return createFormalParemeterSequenceNode(this.visitParameters(context.parameter()), this.options.showNodeText ? context.text : undefined)
   }
 
-  visitParameters = (contexts: Parser.ParameterContext[]): ParameterNode[] => {
+  visitParameters = (contexts: Parser.ParameterContext[]): Partial<ParameterNode>[] => {
     return contexts.map(context => {
       return this.visitParameter(context);
     })
   }
 
-  visitParameter = (context: Parser.ParameterContext): ParameterNode => {
+  visitParameter = (context: Parser.ParameterContext): Partial<ParameterNode> => {
     let identifier = this.visitIdentifier(context.identifier());
     let type: TypeNode
     if (context.type()) {
@@ -367,9 +370,9 @@ export default class XDocASTVisitor {
     return createParameterNode(identifier, type, this.options.showNodeText ? context.text : undefined);
   }
 
-  visitTuple = (context: Parser.TupleTypeContext): TupleTypeNode => {
-    let identifier: IdentifierNode
-    let types: TypeNode[]
+  visitTuple = (context: Parser.TupleTypeContext): Partial<TupleTypeNode> => {
+    let identifier: Partial<IdentifierNode>
+    let types: Partial<TypeNode>[]
     if (context.identifier()) {
       identifier = this.visitIdentifier(context.identifier());
     }
@@ -381,13 +384,13 @@ export default class XDocASTVisitor {
     return createTupleTypeNode(identifier, types, this.options.showNodeText ? context.text : undefined);
   }
 
-  visitTupleSequenceType = (context: Parser.TupleTypeSequenceContext): TypeNode[] | undefined[] => {
+  visitTupleSequenceType = (context: Parser.TupleTypeSequenceContext): Partial<TypeNode>[] | undefined[] => {
     return (context.type() || []).map(type => this.visitType(type));
   }
 
-  visitPrimaryType = (context: Parser.PrimaryTypeContext) => {
+  visitPrimaryType = (context: Parser.PrimaryTypeContext): Partial<PrimaryTypeNode> => {
 
-    let primary: IdentifierNode | KeywordNode | PropertyIdentifierNode;
+    let primary: Partial<IdentifierNode> | Partial<KeywordNode> | Partial<PropertyIdentifierNode>;
 
     if (context.optionalIdentifier()) {
       primary = this.visitOptionalIdentifier(context.optionalIdentifier());
@@ -399,7 +402,7 @@ export default class XDocASTVisitor {
     return createPrimaryTypeNode(primary, this.options.showNodeText ? context.text : undefined);
   }
 
-  visitIdentifierOrKeyword = (context: Parser.IdentifierOrKeywordContext): (IdentifierNode | KeywordNode) => {
+  visitIdentifierOrKeyword = (context: Parser.IdentifierOrKeywordContext): Partial<(IdentifierNode | KeywordNode)> => {
     if (context.identifier()) {
       return this.visitIdentifier(context.identifier())
     }
@@ -409,19 +412,19 @@ export default class XDocASTVisitor {
     }
   }
 
-  visitKeyword = (context: Parser.KeywordContext) => {
+  visitKeyword = (context: Parser.KeywordContext): KeywordNode => {
     if (context.NullLiteral()) {
       return createKeywordNode(context.NullLiteral().text);
     }
   }
 
-  visitParenthesizedType = (context: Parser.ParenthesizedTypeContext, optional = false): ParenthesizedTypeNode => {
+  visitParenthesizedType = (context: Parser.ParenthesizedTypeContext, optional = false): Partial<ParenthesizedTypeNode> => {
     if (context.type()) {
       return createParenthesizedTypeNode(this.visitType(context.type()), optional, this.options.showNodeText ? context.text : undefined);
     }
   }
 
-  visitUnaryType = (context: Parser.UnaryTypeContext) => {
+  visitUnaryType = (context: Parser.UnaryTypeContext): Partial<UnaryTypeNode> => {
     return createUnaryTypeNode(
       (context.AMP() || context.STAR()).text,
       this.visitPrimaryType(context.primaryType()),
@@ -429,7 +432,7 @@ export default class XDocASTVisitor {
     );
   }
 
-  visitObjectType = (context: Parser.ObjectTypeContext) => {
+  visitObjectType = (context: Parser.ObjectTypeContext): Partial<ObjectTypeNode> => {
     return createObjectTypeNode(this.visitObjectPairSequenceType(context.objectPairSequenceType()), this.options.showNodeText ? context.text : undefined);
   }
 
@@ -439,7 +442,7 @@ export default class XDocASTVisitor {
     });
   }
 
-  visitArrayType = (context: Parser.ArrayTypeContext): ArrayTypeNode => {
+  visitArrayType = (context: Parser.ArrayTypeContext): Partial<ArrayTypeNode> => {
 
     if (context.notArrayType()) {
       return createArrayTypeNode(
@@ -455,7 +458,7 @@ export default class XDocASTVisitor {
     )
   }
 
-  visitPropertyIdentifier = (context: Parser.PropertyIdentifierContext): PropertyIdentifierNode => {
+  visitPropertyIdentifier = (context: Parser.PropertyIdentifierContext): Partial<PropertyIdentifierNode> => {
 
     // Assume 'context' is defined.
     let identifier = context.identifier() ?
@@ -470,13 +473,13 @@ export default class XDocASTVisitor {
     return createPropertyIdentifierNode(property, context.text)
   }
 
-  visitOptionalIdentifier = (context: Parser.OptionalIdentifierContext): OptionalIdentifierNode => {
+  visitOptionalIdentifier = (context: Parser.OptionalIdentifierContext): Partial<OptionalIdentifierNode> => {
     if (context.identifier()) {
       return this.visitIdentifier(context.identifier(), !!context.QUESTION())
     }
   }
 
-  visitOptionalIdentifierOrIdentifier = (context: Parser.OptionalIdentifierOrIdentifierContext): OptionalIdentifierNode | IdentifierNode => {
+  visitOptionalIdentifierOrIdentifier = (context: Parser.OptionalIdentifierOrIdentifierContext): Partial<OptionalIdentifierNode> | Partial<IdentifierNode> => {
     if (context.identifier()) {
       return this.visitIdentifier(context.identifier())
     }
@@ -488,7 +491,7 @@ export default class XDocASTVisitor {
 
   /* Expression visitor */
 
-  visitExpression = (context: Parser.ExpressionContext): ExpressionNode => {
+  visitExpression = (context: Parser.ExpressionContext): Partial<ExpressionNode> => {
     if (context.unaryExpression()) {
       return createExpressionNode(
         this.visitUnaryExpression(context.unaryExpression()),
@@ -547,7 +550,7 @@ export default class XDocASTVisitor {
     }
   }
 
-  visitUnaryExpression = (context: Parser.UnaryExpressionContext): UnaryExpressionNode => {
+  visitUnaryExpression = (context: Parser.UnaryExpressionContext): Partial<UnaryExpressionNode> => {
     return createUnaryExpressionNode(
       (context.PLUS() || context.MINUS()).text,
       this.visitExpression(context.expression()),
@@ -555,13 +558,13 @@ export default class XDocASTVisitor {
     )
   }
 
-  visitArrayExpression = (context: Parser.ArrayExpressionContext): ExpressionNode[] => {
+  visitArrayExpression = (context: Parser.ArrayExpressionContext): Partial<ExpressionNode>[] => {
     return (context ? context.expression() : []).map(expression => {
       return this.visitExpression(expression)
     })
   }
 
-  visitObjectExpression = (context: Parser.ObjectExpressionContext): ObjectExpressionNode => {
+  visitObjectExpression = (context: Parser.ObjectExpressionContext): Partial<ObjectExpressionNode> => {
     return createObjectExpressionNode(
       this.visitObjectPairSequenceExpression(context.objectPairSequenceExpression()),
       this.options.showNodeText ? context.text : undefined
@@ -569,7 +572,7 @@ export default class XDocASTVisitor {
   }
 
 
-  visitObjectPairSequenceExpression = (context: Parser.ObjectPairSequenceExpressionContext): ObjectPairExpressionNode[] => {
+  visitObjectPairSequenceExpression = (context: Parser.ObjectPairSequenceExpressionContext): Partial<ObjectPairExpressionNode>[] => {
     return (context ? context.objectPairExpression() : []).map(pair => {
       return createObjectPairExpressionNode(
         this.visitLiteralExpression(pair.literalExpression(0)),
@@ -581,15 +584,15 @@ export default class XDocASTVisitor {
     });
   }
 
-  visitLambdaExpression = (context: Parser.LambdaExpressionContext): LambdaExpressionNode => {
+  visitLambdaExpression = (context: Parser.LambdaExpressionContext): Partial<LambdaExpressionNode> => {
     return this.visitLambdaType(context);
   }
 
-  visitParenthesizedExpression = (context: Parser.ParenthesizedExpressionContext): ParenthesizedExpressionNode => {
+  visitParenthesizedExpression = (context: Parser.ParenthesizedExpressionContext): Partial<ParenthesizedExpressionNode> => {
     return createParenthesizedExpressioneNode(this.visitExpression(context.expression()));
   }
 
-  visitLiteralExpression = (context: Parser.LiteralExpressionContext): LiteralExpressionNode => {
+  visitLiteralExpression = (context: Parser.LiteralExpressionContext): Partial<LiteralExpressionNode> => {
     let node = { literal: {} }
     if (context.NumberLiteral()) {
       return createLiteralExpressionNode(
@@ -613,24 +616,24 @@ export default class XDocASTVisitor {
 
   /* Description visitor */
 
-  visitDescription = (context: Parser.DescriptionContext): DescriptionNode => {
+  visitDescription = (context: Parser.DescriptionContext): Partial<DescriptionNode> => {
     return createDescriptionNode(
       context.text,
       this.visitDescriptionLine(context.descriptionLine())
     )
   }
 
-  visitDescriptionLine = (context: Parser.DescriptionLineContext): InlineTagNode[] => {
+  visitDescriptionLine = (context: Parser.DescriptionLineContext): Partial<InlineTagNode>[] => {
     return this.visitDescriptionLineElement(context.descriptionLineElement());
   }
 
-  visitDescriptionLineElement = (context: Parser.DescriptionLineElementContext[]): InlineTagNode[] => {
+  visitDescriptionLineElement = (context: Parser.DescriptionLineElementContext[]): Partial<InlineTagNode>[] => {
     return (context || []).map(element => {
       return element.inlineTag() ? this.visitInlineTag(element.inlineTag()) : undefined
     }).filter(element => element !== undefined);
   }
 
-  visitInlineTag = (context: Parser.InlineTagContext): InlineTagNode => {
+  visitInlineTag = (context: Parser.InlineTagContext): Partial<InlineTagNode> => {
     return createInlineTagNode(
       this.visitIdentifier(context.inlineTagName().identifier()),
       this.visitInlineTagBody(context.inlineTagBody()),

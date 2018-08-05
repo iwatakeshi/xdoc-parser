@@ -9,61 +9,59 @@
  * @return DocumentationNode - See {@link XDocASTNode.ts::DocumentationNode}.
  * ```
  */
-export declare function createDocumentationNode(body: BodyNode, text?: string): DocumentationNode;
+export declare function createDocumentationNode(body: Partial<BodyNode>, text?: string): Partial<DocumentationNode>;
 export interface DocumentationNode {
     documentation: {
-        body: BodyNode;
+        body?: Partial<BodyNode>;
         text?: string;
     };
 }
 /**
  * Creates a Body node.
  */
-export declare function createBodyNode(annotations: AnnotationsNode, text?: string): BodyNode;
+export declare function createBodyNode(annotations: Partial<AnnotationsNode>, text?: string): Partial<BodyNode>;
 export interface BodyNode {
-    annotations: TagNode[] | undefined[];
+    annotations: Partial<AnnotationsNode>;
     text?: string;
 }
-export declare type AnnotationsNode = TagNode[] | undefined[];
-export declare function createTagNode(name: TagNameNode, identifier: TagIdentifierNode | IdentifierNode, type: TypeNode, expression: ExpressionNode, description: DescriptionNode, text?: string): TagNode;
+export declare type AnnotationsNode = Partial<TagNode>[] | undefined[];
+export declare function createTagNode(name: Partial<TagNameNode>, identifier: Partial<TagIdentifierNode> | Partial<IdentifierNode>, type: Partial<TypeNode>, expression: Partial<ExpressionNode>, description: Partial<DescriptionNode>, text?: string): TagNode;
 export interface TagNode {
-    name?: TagNameNode;
-    identifier?: TagIdentifierNode | IdentifierNode;
-    type?: TypeNode;
-    expression?: ExpressionNode;
-    description?: DescriptionNode;
+    name?: Partial<TagNameNode>;
+    identifier?: Partial<TagIdentifierNode>;
+    type?: Partial<TypeNode>;
+    expression?: Partial<ExpressionNode>;
+    description?: Partial<DescriptionNode>;
     text?: string;
 }
-export declare function createTagNameNode(name: IdentifierNode, text?: string): TagNameNode;
+export declare function createTagNameNode(name: Partial<IdentifierNode>, text?: string): Partial<TagNameNode>;
 export interface TagNameNode {
-    name: IdentifierNode;
+    name: Partial<IdentifierNode>;
     text?: string;
 }
-export declare function createTagIdentifierNode(identifier: IdentifierNode | OptionalIdentifierNode | undefined, property?: PropertyTagIdentifierNode | undefined, text?: string): TagIdentifierNode;
+export declare function createTagIdentifierNode(identifier: Partial<IdentifierNode> | Partial<OptionalIdentifierNode> | undefined, property?: Partial<PropertyTagIdentifierNode> | undefined, text?: string): Partial<TagIdentifierNode>;
 export interface TagIdentifierNode {
     identifier?: IdentifierNode | OptionalTagIdentifierNode;
     property?: PropertyTagIdentifierNode;
     text?: string;
 }
-export declare function createOptionalTagIdentifierNode(identifier: OptionalTagIdentifierNode): OptionalIdentifierNode;
-export interface OptionalTagIdentifierNode extends OptionalIdentifierNode {
-}
-export declare function createPropertyTagIdentifierNode(property: (IdentifierNode | OptionalTagIdentifierNode)[] | undefined[], text?: string): PropertyTagIdentifierNode;
+export declare function createOptionalTagIdentifierNode(identifier: Partial<OptionalTagIdentifierNode>): Partial<OptionalIdentifierNode>;
+export declare type OptionalTagIdentifierNode = OptionalIdentifierNode;
+export declare function createPropertyTagIdentifierNode(property: Partial<(IdentifierNode | OptionalTagIdentifierNode)>[] | undefined[], text?: string): Partial<PropertyTagIdentifierNode>;
 export interface PropertyTagIdentifierNode {
     property: (IdentifierNode | OptionalTagIdentifierNode)[] | undefined[];
     text?: string;
 }
-export declare function createIdentifierNode(text: string, optional?: boolean, property?: IdentifierNode[] | undefined[]): IdentifierNode;
+export declare function createIdentifierNode(text: string, optional?: boolean, property?: Partial<IdentifierNode>[] | undefined[]): Partial<IdentifierNode>;
 export interface IdentifierNode {
     identifier: {
-        optional: boolean;
-        property: IdentifierNode[] | undefined[];
-        text: string;
+        optional?: boolean;
+        property?: IdentifierNode[] | undefined[];
+        text?: string;
     };
 }
-export declare function createOptionalIdentifierNode(optional: boolean, property: IdentifierNode[] | undefined[], text?: string): OptionalIdentifierNode;
-export interface OptionalIdentifierNode extends IdentifierNode {
-}
+export declare function createOptionalIdentifierNode(optional: boolean, property: IdentifierNode[] | undefined[], text?: string): Partial<OptionalIdentifierNode>;
+export declare type OptionalIdentifierNode = IdentifierNode;
 /**
  *
  * Creates a Type node.
@@ -87,7 +85,7 @@ export interface OptionalIdentifierNode extends IdentifierNode {
  * - Determines whether the type of node is optional.
  * ```
  */
-export declare function createTypeNode(type: IntersectTypeNode | UnionTypeNode | LambdaTypeNode | TupleTypeNode | PrimaryTypeNode | ParenthesizedTypeNode | UnaryTypeNode | ObjectTypeNode | ArrayTypeNode | PropertyIdentifierNode, optional?: boolean, text?: string): TypeNode;
+export declare function createTypeNode(type: Partial<IntersectTypeNode> | Partial<UnionTypeNode> | Partial<LambdaTypeNode> | Partial<TupleTypeNode> | Partial<PrimaryTypeNode> | Partial<ParenthesizedTypeNode> | Partial<UnaryTypeNode> | Partial<ObjectTypeNode> | Partial<ArrayTypeNode> | Partial<PropertyIdentifierNode>, optional?: boolean, text?: string): Partial<TypeNode>;
 export interface TypeNode {
     intersect?: IntersectTypeNode;
     union?: UnionTypeNode;
@@ -99,7 +97,7 @@ export interface TypeNode {
     object?: ObjectTypeNode;
     array?: ArrayTypeNode;
     property?: PropertyIdentifierNode;
-    optional: boolean;
+    optional?: boolean;
     text?: string;
 }
 /**
@@ -112,11 +110,11 @@ export interface TypeNode {
  * @public right: TypeNode - The type of node that appears on the right-hand side.
  * ```
  */
-export declare function createIntersectTypeNode(left: TypeNode, right: TypeNode, text?: string): IntersectTypeNode;
+export declare function createIntersectTypeNode(left: TypeNode, right: TypeNode, text?: string): Partial<IntersectTypeNode>;
 export interface IntersectTypeNode {
     intersect: {
-        left: TypeNode;
-        right: TypeNode;
+        left?: TypeNode;
+        right?: TypeNode;
         text?: string;
     };
 }
@@ -131,11 +129,11 @@ export interface IntersectTypeNode {
  * @public right: TypeNode - The type of node that appears on the right-hand side.
  * ```
  */
-export declare function createUnionTypeNode(left: TypeNode, right: TypeNode, text?: string): UnionTypeNode;
+export declare function createUnionTypeNode(left: TypeNode, right: TypeNode, text?: string): Partial<UnionTypeNode>;
 export interface UnionTypeNode {
     union: {
-        left: TypeNode;
-        right: TypeNode;
+        left?: TypeNode;
+        right?: TypeNode;
         text?: string;
     };
 }
@@ -152,34 +150,34 @@ export interface UnionTypeNode {
  * - The return type in a lambda type.
  * ```
  */
-export declare function createLambdaTypeNode(parameters: FormalParameterSequenceNode | undefined[], type: TypeNode, text?: string): LambdaTypeNode;
+export declare function createLambdaTypeNode(parameters: Partial<FormalParameterSequenceNode> | undefined[], type: TypeNode, text?: string): Partial<LambdaTypeNode>;
 export interface LambdaTypeNode {
     lambda: {
-        parameters: FormalParameterSequenceNode | undefined[];
-        type: TypeNode;
+        parameters?: FormalParameterSequenceNode | undefined[];
+        type?: TypeNode;
         text?: string;
     };
 }
-export declare function createFormalParemeterSequenceNode(parameters: ParameterNode[] | undefined[], text?: string): FormalParameterSequenceNode;
+export declare function createFormalParemeterSequenceNode(parameters: Partial<ParameterNode>[] | undefined[], text?: string): FormalParameterSequenceNode;
 export interface FormalParameterSequenceNode {
-    parameters: ParameterNode[] | undefined[];
+    parameters: Partial<ParameterNode>[] | undefined[];
     text?: string;
 }
-export declare function createParameterNode(identifier: IdentifierNode, type?: TypeNode, text?: string): ParameterNode;
+export declare function createParameterNode(identifier: Partial<IdentifierNode>, type?: Partial<TypeNode>, text?: string): Partial<ParameterNode>;
 export interface ParameterNode {
-    identifier: IdentifierNode;
-    type?: TypeNode;
+    identifier: Partial<IdentifierNode>;
+    type?: Partial<TypeNode>;
     text?: string;
 }
-export declare function createTupleTypeNode(identifier: IdentifierNode, types: TypeNode[] | undefined[], text?: string): TupleTypeNode;
+export declare function createTupleTypeNode(identifier: Partial<IdentifierNode>, types: Partial<TypeNode>[] | undefined[], text?: string): Partial<TupleTypeNode>;
 export interface TupleTypeNode {
-    identifier?: IdentifierNode;
-    types: TypeNode[] | undefined[];
+    identifier?: Partial<IdentifierNode>;
+    types: Partial<TypeNode>[] | undefined[];
     text?: string;
 }
-export declare function createPrimaryTypeNode(primary: OptionalIdentifierNode | (IdentifierNode | KeywordNode), text?: string): PrimaryTypeNode;
+export declare function createPrimaryTypeNode(primary: Partial<OptionalIdentifierNode> | Partial<(IdentifierNode | KeywordNode)> | Partial<PropertyIdentifierNode>, text?: string): Partial<PrimaryTypeNode>;
 export interface PrimaryTypeNode {
-    primary: OptionalIdentifierNode | (IdentifierNode | KeywordNode);
+    primary: Partial<OptionalIdentifierNode> | Partial<IdentifierNode> | KeywordNode;
     text?: string;
 }
 export declare function createKeywordNode(text: string | "null" | "undefined"): KeywordNode;
@@ -188,109 +186,109 @@ export interface KeywordNode {
         text?: string;
     };
 }
-export declare function createParenthesizedTypeNode(type: TypeNode, optional?: boolean, text?: string): ParenthesizedTypeNode;
+export declare function createParenthesizedTypeNode(type: Partial<TypeNode>, optional?: boolean, text?: string): Partial<ParenthesizedTypeNode>;
 export interface ParenthesizedTypeNode {
     parenthesized: {
-        type: TypeNode;
+        type?: Partial<TypeNode>;
         text?: string;
     };
 }
-export declare function createUnaryTypeNode(operator: string | "&" | "*", right: PrimaryTypeNode, text?: string): UnaryTypeNode;
+export declare function createUnaryTypeNode(operator: string | "&" | "*", right: Partial<PrimaryTypeNode>, text?: string): Partial<UnaryTypeNode>;
 export interface UnaryTypeNode {
     unary: {
-        operator: string | "&" | "*";
-        right: PrimaryTypeNode;
+        operator?: string | "&" | "*";
+        right?: Partial<PrimaryTypeNode>;
         text?: string;
     };
 }
-export declare function createObjectTypeNode(object?: ObjectPairTypeNode[] | undefined[], text?: string): ObjectTypeNode;
+export declare function createObjectTypeNode(object?: Partial<ObjectPairTypeNode>[] | undefined[], text?: string): Partial<ObjectTypeNode>;
 export interface ObjectTypeNode {
-    object: ObjectPairTypeNode[] | undefined[];
+    object: Partial<ObjectPairTypeNode>[] | undefined[];
     text?: string;
 }
-export declare function createObjectPairTypeNode(key: TypeNode, value: TypeNode, text?: string): ObjectPairTypeNode;
+export declare function createObjectPairTypeNode(key: TypeNode, value: TypeNode, text?: string): Partial<ObjectPairTypeNode>;
 export interface ObjectPairTypeNode {
-    key: TypeNode;
-    value: TypeNode;
+    key: Partial<TypeNode>;
+    value: Partial<TypeNode>;
     text?: string;
 }
-export declare function createArrayTypeNode(type: TypeNode, types: TypeNode[] | undefined[], text?: string): ArrayTypeNode;
+export declare function createArrayTypeNode(type: Partial<TypeNode>, types: Partial<TypeNode>[] | undefined[], text?: string): ArrayTypeNode;
 export interface ArrayTypeNode {
     array: {
-        type?: TypeNode;
-        types?: TypeNode[] | undefined[];
+        type?: Partial<TypeNode>;
+        types?: Partial<TypeNode>[] | undefined[];
         text?: string;
     };
 }
-export declare function createPropertyIdentifierNode(property: IdentifierNode[] | undefined[], text: string): PropertyIdentifierNode;
+export declare function createPropertyIdentifierNode(property: Partial<IdentifierNode>[] | undefined[], text: string): Partial<PropertyIdentifierNode>;
 export interface PropertyIdentifierNode extends IdentifierNode {
 }
-export declare function createExpressionNode(expression: UnaryExpressionNode | BinaryExpressionNode | ArrayExpressionNode | ObjectExpressionNode | LambdaExpressionNode | LiteralExpressionNode | ParenthesizedExpressionNode, text?: string): ExpressionNode;
+export declare function createExpressionNode(expression: Partial<UnaryExpressionNode> | Partial<BinaryExpressionNode> | Partial<ArrayExpressionNode> | Partial<ObjectExpressionNode> | Partial<LambdaExpressionNode> | Partial<LiteralExpressionNode> | Partial<ParenthesizedExpressionNode>, text?: string): Partial<ExpressionNode>;
 export interface ExpressionNode {
     expression: UnaryExpressionNode | BinaryExpressionNode | ArrayExpressionNode | ObjectExpressionNode | LambdaExpressionNode | LiteralExpressionNode | ParenthesizedExpressionNode;
     text?: string;
 }
-export declare function createUnaryExpressionNode(operator: string | '+' | '-', right: ExpressionNode, text?: string): UnaryExpressionNode;
+export declare function createUnaryExpressionNode(operator: string | '+' | '-', right: Partial<ExpressionNode>, text?: string): Partial<UnaryExpressionNode>;
 export interface UnaryExpressionNode {
     unary: {
-        operator: string | '+' | '-';
-        right: ExpressionNode;
+        operator?: string | '+' | '-';
+        right?: Partial<ExpressionNode>;
         text?: string;
     };
 }
-export declare function createBinaryExpressionNode(operator: string | '+' | '-', left: ExpressionNode, right: ExpressionNode, text?: string): BinaryExpressionNode;
+export declare function createBinaryExpressionNode(operator: string | '+' | '-', left: Partial<ExpressionNode>, right: Partial<ExpressionNode>, text?: string): Partial<BinaryExpressionNode>;
 export interface BinaryExpressionNode {
     binary: {
-        left: ExpressionNode;
-        right: ExpressionNode;
-        operator: string | '+' | '-' | '*' | '/';
+        operator?: string | '+' | '-' | '*' | '/';
+        left?: ExpressionNode;
+        right?: ExpressionNode;
         text?: string;
     };
 }
-export declare function createArrayExpressionNode(array?: ExpressionNode[], text?: string): ArrayExpressionNode;
+export declare function createArrayExpressionNode(array?: Partial<ExpressionNode>[], text?: string): Partial<ArrayExpressionNode>;
 export interface ArrayExpressionNode {
-    array: ExpressionNode[];
+    array?: Partial<ExpressionNode>[];
     text?: string;
 }
-export declare function createObjectExpressionNode(object?: ObjectPairExpressionNode[], text?: string): ObjectExpressionNode;
+export declare function createObjectExpressionNode(object?: Partial<ObjectPairExpressionNode>[], text?: string): Partial<ObjectExpressionNode>;
 export interface ObjectExpressionNode {
-    object: ObjectPairExpressionNode[];
+    object: Partial<ObjectPairExpressionNode>[];
     text?: string;
 }
-export declare function createObjectPairExpressionNode(key: LiteralExpressionNode, value: ObjectExpressionNode | LiteralExpressionNode, text?: string): ObjectPairExpressionNode;
+export declare function createObjectPairExpressionNode(key: Partial<LiteralExpressionNode>, value: Partial<ObjectExpressionNode> | Partial<LiteralExpressionNode>, text?: string): Partial<ObjectPairExpressionNode>;
 export interface ObjectPairExpressionNode {
-    key: LiteralExpressionNode;
-    value: ObjectExpressionNode | LiteralExpressionNode;
+    key: Partial<LiteralExpressionNode>;
+    value: Partial<ObjectExpressionNode> | Partial<LiteralExpressionNode>;
     text?: string;
 }
-export declare function createLambdaExpressionNode(parameters: FormalParameterSequenceNode | undefined[], type: TypeNode, text?: string): LambdaExpressionNode;
+export declare function createLambdaExpressionNode(parameters: FormalParameterSequenceNode | undefined[], type: TypeNode, text?: string): Partial<LambdaExpressionNode>;
 export interface LambdaExpressionNode extends LambdaTypeNode {
 }
-export declare function createParenthesizedExpressioneNode(expression: ExpressionNode, optional?: boolean, text?: string): ParenthesizedExpressionNode;
+export declare function createParenthesizedExpressioneNode(expression: Partial<ExpressionNode>, optional?: boolean, text?: string): Partial<ParenthesizedExpressionNode>;
 export interface ParenthesizedExpressionNode {
     parenthesized: {
-        expression: ExpressionNode;
-        optional: boolean;
+        expression?: ExpressionNode;
+        optional?: boolean;
         text?: string;
     };
 }
-export declare function createLiteralExpressionNode(type: string, text: string): LiteralExpressionNode;
+export declare function createLiteralExpressionNode(type: string, text: string): Partial<LiteralExpressionNode>;
 export interface LiteralExpressionNode {
     literal: {
-        type: string;
+        type?: string;
         text?: string;
     };
 }
-export declare function createDescriptionNode(text: string, inlines?: InlineTagNode[]): DescriptionNode;
+export declare function createDescriptionNode(text: string, inlines?: Partial<InlineTagNode>[]): Partial<DescriptionNode>;
 export interface DescriptionNode {
     description: {
-        text: string;
-        inlines?: InlineTagNode[];
+        text?: string;
+        inlines?: Partial<InlineTagNode>[];
     };
 }
-export declare function createInlineTagNode(identifier: IdentifierNode, body: string, text?: string): InlineTagNode;
+export declare function createInlineTagNode(identifier: Partial<IdentifierNode>, body: string, text?: string): Partial<InlineTagNode>;
 export interface InlineTagNode {
-    identifier: IdentifierNode;
-    body: string;
+    identifier: Partial<IdentifierNode>;
+    body?: string;
     text?: string;
 }

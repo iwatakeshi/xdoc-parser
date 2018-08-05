@@ -12,7 +12,7 @@ const getCode = () => xdoc(source).map(ast => {
   return code;
 })[0];
 
-const documentation = (annotations: TagNode[]): DocumentationNode => createDocumentationNode(
+const documentation = (annotations: TagNode[]): Partial<DocumentationNode> => createDocumentationNode(
   createBodyNode(
     annotations
   )

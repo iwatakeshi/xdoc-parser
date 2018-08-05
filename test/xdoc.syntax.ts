@@ -11,7 +11,7 @@ const generate = (source) => new XDocASTGenerator(source).generate();
 const parse = (source: string) => 
 new XDocASTVisitor(generate(source)).visit();
 
-const documentation = (annotations: TagNode[]): DocumentationNode => createDocumentationNode(
+const documentation = (annotations: TagNode[]): Partial<DocumentationNode> => createDocumentationNode(
   createBodyNode(
     annotations
   )
@@ -2907,7 +2907,7 @@ describe('XDoc Syntax Parser (Tom)', () => {
                     createLiteralExpressionNode('string', '"a"'),
                     createObjectExpressionNode([
                       createObjectPairExpressionNode(
-                        createLiteralExpressionNode('string', '"b"'),
+                         createLiteralExpressionNode('string', '"b"'),
                         createLiteralExpressionNode('string', '"c"')
                       )
                     ])

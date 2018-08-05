@@ -10,9 +10,9 @@ import * as _ from "lodash";
  * @param object
  * ```
  */
-function sanitize(object) {
+function sanitize<T>(object) {
   // Object.keys(object).forEach((key) => (object[key] == null) && delete object[key]);
-  return _.pickBy(object)
+  return _.pickBy(object) as Partial<T>
 }
 
 /**
@@ -27,15 +27,15 @@ function sanitize(object) {
  * ```
  */
 export function createDocumentationNode(
-  body: BodyNode,
+  body: Partial<BodyNode>,
   text?: string
-): DocumentationNode {
+): Partial<DocumentationNode> {
   return { documentation: sanitize({ body, text }) }
 }
 
 export interface DocumentationNode {
   documentation: {
-    body: BodyNode,
+    body?: Partial<BodyNode>,
     text?: string
   }
 }
@@ -44,58 +44,58 @@ export interface DocumentationNode {
  * Creates a Body node.
  */
 export function createBodyNode(
-  annotations: AnnotationsNode,
+  annotations: Partial<AnnotationsNode>,
   text?: string
-): BodyNode {
+): Partial<BodyNode> {
   return sanitize({ annotations, text })
 }
 
 export interface BodyNode {
-  annotations: TagNode[] | undefined[],
+  annotations: Partial<AnnotationsNode>,
   text?: string
 }
 
-export type AnnotationsNode = TagNode[] | undefined[];
+export type AnnotationsNode = Partial<TagNode>[] | undefined[];
 
 /* Tag */
 
 export function createTagNode(
-  name: TagNameNode,
-  identifier: TagIdentifierNode | IdentifierNode,
-  type: TypeNode,
-  expression: ExpressionNode,
-  description: DescriptionNode,
+  name: Partial<TagNameNode>,
+  identifier: Partial<TagIdentifierNode> | Partial<IdentifierNode>,
+  type: Partial<TypeNode>,
+  expression: Partial<ExpressionNode>,
+  description: Partial<DescriptionNode>,
   text?: string
 ): TagNode {
   return sanitize(Object.assign({}, name, identifier, { type }, expression, description, text));
 }
 
 export interface TagNode {
-  name?: TagNameNode,
-  identifier?: TagIdentifierNode | IdentifierNode,
-  type?: TypeNode,
-  expression?: ExpressionNode,
-  description?: DescriptionNode,
+  name?: Partial<TagNameNode>,
+  identifier?:Partial <TagIdentifierNode>,
+  type?: Partial<TypeNode>,
+  expression?: Partial<ExpressionNode>,
+  description?: Partial<DescriptionNode>,
   text?: string
 }
 
 export function createTagNameNode(
-  name: IdentifierNode,
+  name: Partial<IdentifierNode>,
   text?: string
-): TagNameNode {
+): Partial<TagNameNode> {
   return sanitize({ name, text })
 }
 
 export interface TagNameNode {
-  name: IdentifierNode,
+  name: Partial<IdentifierNode>,
   text?: string
 }
 
 export function createTagIdentifierNode(
-  identifier: IdentifierNode | OptionalIdentifierNode | undefined,
-  property?: PropertyTagIdentifierNode | undefined,
+  identifier: Partial<IdentifierNode> | Partial<OptionalIdentifierNode> | undefined,
+  property?: Partial<PropertyTagIdentifierNode> | undefined,
   text?: string
-): TagIdentifierNode {
+): Partial<TagIdentifierNode> {
   let node = {}
   if (identifier) Object.assign(node, { identifier, text })
   else if (property) Object.assign(node, { property, text })
@@ -109,19 +109,19 @@ export interface TagIdentifierNode {
 }
 
 export function createOptionalTagIdentifierNode(
-  identifier: OptionalTagIdentifierNode
-): OptionalIdentifierNode {
+  identifier: Partial<OptionalTagIdentifierNode>
+): Partial<OptionalIdentifierNode> {
   return identifier;
 }
 
-export interface OptionalTagIdentifierNode extends OptionalIdentifierNode { }
+export type OptionalTagIdentifierNode = OptionalIdentifierNode;
 
 
 export function createPropertyTagIdentifierNode(
-  property: (IdentifierNode | OptionalTagIdentifierNode)[] | undefined[],
+  property: Partial<(IdentifierNode | OptionalTagIdentifierNode)>[] | undefined[],
   text?: string
-): PropertyTagIdentifierNode {
-  return sanitize({ property, text })
+): Partial<PropertyTagIdentifierNode> {
+  return sanitize<PropertyTagIdentifierNode>({ property, text })
 }
 export interface PropertyTagIdentifierNode {
   // Shortcut of OptionalTagOrIdentifier
@@ -132,8 +132,8 @@ export interface PropertyTagIdentifierNode {
 export function createIdentifierNode(
   text: string,
   optional = false,
-  property?: IdentifierNode[] | undefined[],
-): IdentifierNode {
+  property?: Partial<IdentifierNode>[] | undefined[],
+): Partial<IdentifierNode> {
   if (!optional) optional = false;
   if (!property) property = []
 
@@ -142,9 +142,9 @@ export function createIdentifierNode(
 
 export interface IdentifierNode {
   identifier: {
-    optional: boolean,
-    property: IdentifierNode[] | undefined[]
-    text: string
+    optional?: boolean,
+    property?: IdentifierNode[] | undefined[]
+    text?: string
   }
 }
 
@@ -152,11 +152,11 @@ export function createOptionalIdentifierNode(
   optional = true,
   property: IdentifierNode[] | undefined[],
   text?: string
-): OptionalIdentifierNode {
-  return createIdentifierNode(text, optional, property, );
+): Partial<OptionalIdentifierNode> {
+  return createIdentifierNode(text, optional, property);
 }
 
-export interface OptionalIdentifierNode extends IdentifierNode { }
+export type OptionalIdentifierNode = IdentifierNode
 
 
 /* Type */
@@ -185,19 +185,19 @@ export interface OptionalIdentifierNode extends IdentifierNode { }
  * ```
  */
 export function createTypeNode(
-  type: IntersectTypeNode
-    | UnionTypeNode
-    | LambdaTypeNode
-    | TupleTypeNode
-    | PrimaryTypeNode
-    | ParenthesizedTypeNode
-    | UnaryTypeNode
-    | ObjectTypeNode
-    | ArrayTypeNode
-    | PropertyIdentifierNode,
+  type: Partial<IntersectTypeNode>
+    | Partial<UnionTypeNode>
+    | Partial<LambdaTypeNode>
+    | Partial<TupleTypeNode>
+    | Partial<PrimaryTypeNode>
+    | Partial<ParenthesizedTypeNode>
+    | Partial<UnaryTypeNode>
+    | Partial<ObjectTypeNode>
+    | Partial<ArrayTypeNode>
+    | Partial<PropertyIdentifierNode>,
   optional = false,
   text?: string
-): TypeNode {
+): Partial<TypeNode> {
   return Object.assign({}, type, sanitize({ optional, text }))
 }
 
@@ -212,7 +212,7 @@ export interface TypeNode {
   object?: ObjectTypeNode,
   array?: ArrayTypeNode,
   property?: PropertyIdentifierNode,
-  optional: boolean,
+  optional?: boolean,
   text?: string
 }
 
@@ -230,14 +230,14 @@ export function createIntersectTypeNode(
   left: TypeNode,
   right: TypeNode,
   text?: string
-): IntersectTypeNode {
+): Partial<IntersectTypeNode> {
   return { intersect: sanitize({ left, right, text }) }
 }
 
 export interface IntersectTypeNode {
   intersect: {
-    left: TypeNode,
-    right: TypeNode,
+    left?: TypeNode,
+    right?: TypeNode,
     text?: string
   }
 }
@@ -258,14 +258,14 @@ export function createUnionTypeNode(
   left: TypeNode,
   right: TypeNode,
   text?: string
-): UnionTypeNode {
+): Partial<UnionTypeNode>{
   return { union: sanitize({ left, right, text }) }
 }
 
 export interface UnionTypeNode {
   union: {
-    left: TypeNode,
-    right: TypeNode,
+    left?: TypeNode,
+    right?: TypeNode,
     text?: string
   }
 }
@@ -284,71 +284,71 @@ export interface UnionTypeNode {
  * ```
  */
 export function createLambdaTypeNode(
-  parameters: FormalParameterSequenceNode | undefined[],
+  parameters: Partial<FormalParameterSequenceNode> | undefined[],
   type: TypeNode,
   text?: string
-): LambdaTypeNode {
+): Partial<LambdaTypeNode> {
   if (!parameters) parameters = []
   return { lambda: sanitize({ parameters, type, text }) }
 }
 
 export interface LambdaTypeNode {
   lambda: {
-    parameters: FormalParameterSequenceNode | undefined[],
-    type: TypeNode,
+    parameters?: FormalParameterSequenceNode | undefined[],
+    type?: TypeNode,
     text?: string
   }
 }
 
 export function createFormalParemeterSequenceNode(
-  parameters: ParameterNode[] | undefined[],
+  parameters: Partial<ParameterNode>[] | undefined[],
   text?: string
 ): FormalParameterSequenceNode {
   return { parameters, text }
 }
 
 export interface FormalParameterSequenceNode {
-  parameters: ParameterNode[] | undefined[],
+  parameters: Partial<ParameterNode>[] | undefined[],
   text?: string
 }
 
 export function createParameterNode(
-  identifier: IdentifierNode,
-  type?: TypeNode,
+  identifier: Partial<IdentifierNode>,
+  type?: Partial<TypeNode>,
   text?: string
-): ParameterNode {
+): Partial<ParameterNode> {
   return sanitize({ identifier, type, text })
 }
 
 export interface ParameterNode {
-  identifier: IdentifierNode,
-  type?: TypeNode,
+  identifier: Partial<IdentifierNode>,
+  type?: Partial<TypeNode>,
   text?: string
 }
 
 export function createTupleTypeNode(
-  identifier: IdentifierNode,
-  types: TypeNode[] | undefined[],
+  identifier: Partial<IdentifierNode>,
+  types: Partial<TypeNode>[] | undefined[],
   text?: string
-): TupleTypeNode {
+): Partial<TupleTypeNode> {
   return sanitize({ identifier, types, text })
 }
 
 export interface TupleTypeNode {
-  identifier?: IdentifierNode,
-  types: TypeNode[] | undefined[],
+  identifier?: Partial<IdentifierNode>,
+  types: Partial<TypeNode>[] | undefined[],
   text?: string
 }
 
 export function createPrimaryTypeNode(
-  primary: OptionalIdentifierNode | (IdentifierNode | KeywordNode),
+  primary: Partial<OptionalIdentifierNode> | Partial<(IdentifierNode | KeywordNode)> | Partial<PropertyIdentifierNode>,
   text?: string
-): PrimaryTypeNode {
+): Partial<PrimaryTypeNode> {
   return sanitize({ primary, text })
 }
 
 export interface PrimaryTypeNode {
-  primary: OptionalIdentifierNode | (IdentifierNode | KeywordNode),
+  primary: Partial<OptionalIdentifierNode> | Partial<IdentifierNode> | KeywordNode,
   text?: string
 }
 
@@ -365,16 +365,16 @@ export interface KeywordNode {
 }
 
 export function createParenthesizedTypeNode(
-  type: TypeNode,
+  type: Partial<TypeNode>,
   optional = false,
   text?: string
-): ParenthesizedTypeNode {
+): Partial<ParenthesizedTypeNode> {
   return { parenthesized: sanitize({ type, optional, text }) };
 }
 
 export interface ParenthesizedTypeNode {
   parenthesized: {
-    type: TypeNode,
+    type?: Partial<TypeNode>,
     text?: string
   }
 }
@@ -382,30 +382,30 @@ export interface ParenthesizedTypeNode {
 
 export function createUnaryTypeNode(
   operator: string | "&" | "*",
-  right: PrimaryTypeNode,
+  right: Partial<PrimaryTypeNode>,
   text?: string
-): UnaryTypeNode {
+): Partial<UnaryTypeNode> {
   return { unary: sanitize({ operator, right, text }) }
 }
 
 export interface UnaryTypeNode {
   unary: {
-    operator: string | "&" | "*",
-    right: PrimaryTypeNode,
+    operator?: string | "&" | "*",
+    right?: Partial<PrimaryTypeNode>,
     text?: string
   }
 }
 
 export function createObjectTypeNode(
-  object?: ObjectPairTypeNode[] | undefined[],
+  object?: Partial<ObjectPairTypeNode>[] | undefined[],
   text?: string
-): ObjectTypeNode {
+): Partial<ObjectTypeNode> {
   if (!object) object = [];
   return sanitize({ object, text })
 }
 
 export interface ObjectTypeNode {
-  object: ObjectPairTypeNode[] | undefined[],
+  object: Partial<ObjectPairTypeNode>[] | undefined[],
   text?: string
 }
 
@@ -413,19 +413,19 @@ export function createObjectPairTypeNode(
   key: TypeNode,
   value: TypeNode,
   text?: string
-): ObjectPairTypeNode {
+): Partial<ObjectPairTypeNode> {
   return sanitize({ key, value, text })
 }
 
 export interface ObjectPairTypeNode {
-  key: TypeNode,
-  value: TypeNode,
+  key: Partial<TypeNode>,
+  value: Partial<TypeNode>,
   text?: string
 }
 
 export function createArrayTypeNode(
-  type: TypeNode,
-  types: TypeNode[] | undefined[],
+  type: Partial<TypeNode>,
+  types: Partial<TypeNode>[] | undefined[],
   text?: string
 ): ArrayTypeNode {
   if (!types) types = [];
@@ -435,16 +435,16 @@ export function createArrayTypeNode(
 
 export interface ArrayTypeNode {
   array: {
-    type?: TypeNode,
-    types?: TypeNode[] | undefined[],
+    type?: Partial<TypeNode>,
+    types?: Partial<TypeNode>[] | undefined[],
     text?: string
   }
 }
 
 export function createPropertyIdentifierNode(
-  property: IdentifierNode[] | undefined[],
+  property: Partial<IdentifierNode>[] | undefined[],
   text: string
-): PropertyIdentifierNode {
+): Partial<PropertyIdentifierNode> {
   return createIdentifierNode(text, false, property)
 };
 
@@ -456,15 +456,15 @@ export interface PropertyIdentifierNode extends IdentifierNode { }
 
 export function createExpressionNode(
   expression:
-    UnaryExpressionNode
-    | BinaryExpressionNode
-    | ArrayExpressionNode
-    | ObjectExpressionNode
-    | LambdaExpressionNode
-    | LiteralExpressionNode
-    | ParenthesizedExpressionNode,
+    Partial<UnaryExpressionNode>
+    | Partial<BinaryExpressionNode>
+    | Partial<ArrayExpressionNode>
+    | Partial<ObjectExpressionNode>
+    | Partial<LambdaExpressionNode>
+    | Partial<LiteralExpressionNode>
+    | Partial<ParenthesizedExpressionNode>,
   text?: string,
-): ExpressionNode {
+): Partial<ExpressionNode> {
   return sanitize({ expression, text })
 }
 
@@ -483,75 +483,75 @@ export interface ExpressionNode {
 
 export function createUnaryExpressionNode(
   operator: string | '+' | '-',
-  right: ExpressionNode,
+  right: Partial<ExpressionNode>,
   text?: string
-): UnaryExpressionNode {
+): Partial<UnaryExpressionNode> {
   return { unary: sanitize({ operator, right, text }) }
 }
 
 export interface UnaryExpressionNode {
   unary: {
-    operator: string | '+' | '-',
-    right: ExpressionNode,
+    operator?: string | '+' | '-',
+    right?: Partial<ExpressionNode>,
     text?: string
   }
 }
 
 export function createBinaryExpressionNode(
   operator: string | '+' | '-',
-  left: ExpressionNode,
-  right: ExpressionNode,
+  left: Partial<ExpressionNode>,
+  right: Partial<ExpressionNode>,
   text?: string
-): BinaryExpressionNode {
+): Partial<BinaryExpressionNode> {
   return { binary: sanitize({ left, right, operator, text }) }
 }
 
 export interface BinaryExpressionNode {
   binary: {
-    left: ExpressionNode,
-    right: ExpressionNode,
-    operator: string | '+' | '-' | '*' | '/',
+    operator?: string | '+' | '-' | '*' | '/',
+    left?: ExpressionNode,
+    right?: ExpressionNode,
     text?: string
   }
 }
 
 export function createArrayExpressionNode(
-  array?: ExpressionNode[],
+  array?: Partial<ExpressionNode>[],
   text?: string
-): ArrayExpressionNode {
+): Partial<ArrayExpressionNode> {
   if (!array) array = [];
   return sanitize({ array, text })
 }
 
 export interface ArrayExpressionNode {
-  array: ExpressionNode[],
+  array?: Partial<ExpressionNode>[],
   text?: string
 }
 
 export function createObjectExpressionNode(
-  object?: ObjectPairExpressionNode[],
+  object?: Partial<ObjectPairExpressionNode>[],
   text?: string
-): ObjectExpressionNode {
+): Partial<ObjectExpressionNode> {
   if (!object) object = []
   return sanitize({ object, text })
 }
 
 export interface ObjectExpressionNode {
-  object: ObjectPairExpressionNode[],
+  object: Partial<ObjectPairExpressionNode>[],
   text?: string
 }
 
 export function createObjectPairExpressionNode(
-  key: LiteralExpressionNode,
-  value: ObjectExpressionNode | LiteralExpressionNode,
+  key: Partial<LiteralExpressionNode>,
+  value: Partial<ObjectExpressionNode> | Partial<LiteralExpressionNode>,
   text?: string
-): ObjectPairExpressionNode {
+): Partial<ObjectPairExpressionNode> {
   return sanitize({ key, value, text })
 }
 
 export interface ObjectPairExpressionNode {
-  key: LiteralExpressionNode,
-  value: ObjectExpressionNode | LiteralExpressionNode,
+  key: Partial<LiteralExpressionNode>,
+  value: Partial<ObjectExpressionNode> | Partial<LiteralExpressionNode>,
   text?: string
 }
 
@@ -559,7 +559,7 @@ export function createLambdaExpressionNode(
   parameters: FormalParameterSequenceNode | undefined[],
   type: TypeNode,
   text?: string
-): LambdaExpressionNode {
+): Partial<LambdaExpressionNode> {
   if (!parameters) parameters = []
   return createLambdaTypeNode(parameters, type, text)
 }
@@ -567,16 +567,16 @@ export function createLambdaExpressionNode(
 export interface LambdaExpressionNode extends LambdaTypeNode { }
 
 export function createParenthesizedExpressioneNode(
-  expression: ExpressionNode,
+  expression: Partial<ExpressionNode>,
   optional = false,
   text?: string
-): ParenthesizedExpressionNode {
+): Partial<ParenthesizedExpressionNode> {
   return { parenthesized: sanitize({ expression, optional, text }) };
 }
 export interface ParenthesizedExpressionNode { 
   parenthesized: {
-    expression: ExpressionNode,
-    optional: boolean,
+    expression?: ExpressionNode,
+    optional?: boolean,
     text?: string
   }
 };
@@ -585,42 +585,42 @@ export interface ParenthesizedExpressionNode {
 export function createLiteralExpressionNode(
   type: string,
   text: string
-): LiteralExpressionNode {
+): Partial<LiteralExpressionNode> {
   return { literal: sanitize({ type, text }) }
 }
 
 export interface LiteralExpressionNode {
   literal: {
-    type: string,
+    type?: string,
     text?: string,
   }
 }
 
 export function createDescriptionNode(
   text: string,
-  inlines?: InlineTagNode[]
-): DescriptionNode {
+  inlines?: Partial<InlineTagNode>[]
+): Partial<DescriptionNode> {
   if (!inlines) inlines = []
   return { description: sanitize({ text, inlines }) }
 }
 
 export interface DescriptionNode {
   description: {
-    text: string,
-    inlines?: InlineTagNode[]
+    text?: string,
+    inlines?: Partial<InlineTagNode>[]
   }
 }
 
 export function createInlineTagNode(
-  identifier: IdentifierNode,
+  identifier: Partial<IdentifierNode>,
   body: string,
   text?: string
-): InlineTagNode {
+): Partial<InlineTagNode> {
   return sanitize({ identifier, body, text })
 }
 
 export interface InlineTagNode {
-  identifier: IdentifierNode,
-  body: string,
+  identifier: Partial<IdentifierNode>,
+  body?: string,
   text?: string
 }
