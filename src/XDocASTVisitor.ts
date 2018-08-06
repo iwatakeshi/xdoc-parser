@@ -87,7 +87,7 @@ export default class XDocASTVisitor {
     showNodeText: false
   }
 
-  constructor(documentation: Parser.DocumentationContext, options?: XDocASTVisitorOptions) {
+  constructor(documentation: Parser.DocumentationContext, options?: Partial<XDocASTVisitorOptions>) {
     Object.assign(this.options, options);
     this.documentation = documentation;
   }

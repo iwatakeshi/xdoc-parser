@@ -29,7 +29,7 @@ export * from './src/XDocSyntaxParserVisitor';
  * }
  * ```
  */
-declare function xdoc(source: any, options: XDocParserOptions): XDocParser;
+declare function xdoc(source: any, options?: Partial<XDocParserOptions>): XDocParser;
 declare namespace xdoc {
     let core: {
         XDocParser: typeof XDocParser;

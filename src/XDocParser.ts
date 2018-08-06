@@ -5,7 +5,7 @@ import XDocASTVisitor, { XDocASTVisitorOptions } from "./XDocASTVisitor";
 
 export interface XDocParserOptions {
   comment: {
-    type: 'SINGLE_HASH_COMMENT'
+    type?: 'SINGLE_HASH_COMMENT'
     | 'SINGLE_STAR_COMMENT'
     | 'DOUBLE_STAR_COMMENT'
     | 'DOUBLE_SLASH_COMMENT'
@@ -13,8 +13,8 @@ export interface XDocParserOptions {
     | 'TRIPLE_QUOTE_COMMENT'
   }
   markdown: {
-    remark: any,
-    headingDepth: number
+    remark?: any,
+    headingDepth?: number
   }
   visitor: XDocASTVisitorOptions | any
 }
@@ -43,7 +43,7 @@ export default class XDocParser {
     },
     visitor: {}
   }
-  constructor(source: string, options?: XDocParserOptions) {
+  constructor(source: string, options?: Partial<XDocParserOptions>) {
     this.source_ = source;
     Object.assign(this.options, options || {});
   }
