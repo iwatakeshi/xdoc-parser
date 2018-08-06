@@ -2,7 +2,7 @@
   "name": "xdoc-parser",
   "version": "2.1.2",
   "description": "An XDoc comment parser.",
-  "main": "./build/index.js",
+  "main": "index.js",
   "directories": {
     "test": "test"
   },
