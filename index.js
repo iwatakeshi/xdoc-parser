@@ -26,7 +26,12 @@ const XDoc = require('./build/src/');
 function xdoc(source, options = {}) {
   return (new XDocParser(source, options))
 }
-
-// Exports
+// Namespace 'core'
 xdoc['core'] = XDoc;
+
+/* Exports */
+
+// JavaScript
 module.exports = xdoc;
+// ES6+ and TypeScript (hack)
+module.exports['default'] = xdoc;
