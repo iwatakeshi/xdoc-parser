@@ -1,4 +1,5 @@
-// Core classes
+const XDocParser = require('./build/src/').XDocParser;
+const XDoc = require('./build/src/');
 
 /**
  * Returns an instance of XDocParser.
@@ -25,17 +26,7 @@
 function xdoc(source, options = {}) {
   return (new XDocParser(source, options))
 }
-// Define namespace 'core' for JavaScript (hack)
-xdoc['core'] = {
-  XDocParser,
-  XDocASTNode,
-  XDocASTGenerator,
-  XDocASTVisitor,
-  XDocCommentParser,
-  XDocSyntaxLexer,
-  XDocSyntaxParser,
-}
 
-
-// Exports (hack)
+// Exports
+xdoc['core'] = XDoc;
 module.exports = xdoc;
