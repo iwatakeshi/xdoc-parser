@@ -29,11 +29,9 @@ import * as XDoc from './src/';
 function xdoc(source, options: XDocParserOptions) {
   return (new XDocParser(source, options))
 }
+namespace xdoc {
+  export const core = XDoc;
+}
 
 // Exports
-Object.defineProperty(xdoc, 'core', {
-  value: XDoc,
-  writable: false
-});
-
 module.exports = xdoc;
