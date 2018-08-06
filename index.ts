@@ -1,8 +1,15 @@
+// Core classes
 import XDocParser, { XDocParserOptions } from './src/XDocParser';
-
-// const XDocParser = require('./build/src/').XDocParser;
-// const XDoc = require('./build/src/');
-import * as XDoc from './src/';
+import * as XDocASTNode from './src/XDocASTNode';
+import XDocASTGenerator from './src/XDocASTGenerator';
+import XDocASTVisitor from './src/XDocASTVisitor';
+import XDocCommentParser from './src/XDocCommentParser';
+// Antlr-specific classes
+import * as XDocSyntaxLexer from './src/XDocSyntaxLexer';
+import * as XDocSyntaxParser from './src/XDocSyntaxParser';
+// Note: This would not appear in ES5
+export * from './src/XDocSyntaxParserListener';
+export * from './src/XDocSyntaxParserVisitor'
 
 /**
  * Returns an instance of XDocParser.
@@ -26,12 +33,36 @@ import * as XDoc from './src/';
  * }
  * ```
  */
-function xdoc(source, options: XDocParserOptions) {
+function xdoc(source, options: XDocParserOptions): XDocParser {
   return (new XDocParser(source, options))
 }
+
+// Define namespace 'core' for TypeScript (hack)
+
 namespace xdoc {
-  export const core = XDoc;
+  export let core = {
+    XDocParser,
+    XDocASTNode,
+    XDocASTGenerator,
+    XDocASTVisitor,
+    XDocCommentParser,
+    XDocSyntaxLexer,
+    XDocSyntaxParser,
+  }
 }
 
-// Exports
+// Define namespace 'core' for JavaScript (hack)
+xdoc['core'] = {
+  XDocParser,
+  XDocASTNode,
+  XDocASTGenerator,
+  XDocASTVisitor,
+  XDocCommentParser,
+  XDocSyntaxLexer,
+  XDocSyntaxParser,
+}
+
+
+// Exports (hack)
+export default xdoc;
 module.exports = xdoc;
