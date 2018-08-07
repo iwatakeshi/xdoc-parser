@@ -26,6 +26,7 @@ const XDoc = require('./build/src/');
 function xdoc(source, options = {}) {
   return (new XDocParser(source, options))
 }
+
 // Namespace 'core'
 xdoc['core'] = XDoc;
 
