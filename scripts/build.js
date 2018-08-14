@@ -11,7 +11,7 @@ if (!shell.which('antlr4ts')) {
     shell.echo('An error occurred while installing dependencies.')
     shell.exit(1);
   }
-  shell.exec('node build.js');
+  shell.exec('node ./scripts/build.js');
   shell.exit(0);
 }
 
