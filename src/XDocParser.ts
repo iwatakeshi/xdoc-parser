@@ -43,7 +43,7 @@ export default class XDocParser {
     },
     visitor: {}
   }
-  
+
   constructor(source: string, options?: Partial<XDocParserOptions>) {
     this.source_ = source;
     Object.assign(this.options, options || {});
@@ -66,8 +66,8 @@ export default class XDocParser {
       .parse()
       .filter(this.filter)[0];
     return {
-      markdown: this.parseMarkdown(comment.text),
-      documentation: this.parseXDoc(comment.text)
+      markdown: comment ? this.parseMarkdown(comment.text): null,
+      documentation: comment ? this.parseXDoc(comment.text): null
     }
   }
 
