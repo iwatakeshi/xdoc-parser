@@ -10,9 +10,7 @@ node_js:
   - '8'
   - '6'
 before_install:
-  - npm i -g mocha
-  - npm i -g typescript
-  - npm i -g antlr4ts antlr4-cli
+  - npm i -g mocha typescript antlr4ts antlr4-cli
   - npm install
   - npm run-script build
 after_success:
