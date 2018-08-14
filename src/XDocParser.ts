@@ -43,6 +43,7 @@ export default class XDocParser {
     },
     visitor: {}
   }
+  
   constructor(source: string, options?: Partial<XDocParserOptions>) {
     this.source_ = source;
     Object.assign(this.options, options || {});
@@ -52,20 +53,41 @@ export default class XDocParser {
     return this.source_;
   }
 
+  /**
+   * Parse a single comment.
+   * 
+   * @return: {
+   *  markdown: RemarkNode[],
+   *  documentation: Partial<DocumentationNode>
+   * }
+   */
   parse = () => {
+    const comment = (new XDocCommentParser(this.source))
+      .parse()
+      .filter(this.filter)[0];
     return {
-      markdown: (new XDocCommentParser(this.source))
-        .parse()
-        .filter(this.filter)
-        .map(this.parseMarkdown),
-      documentation: this.parseXDoc(this.source)
+      markdown: this.parseMarkdown(comment.text),
+      documentation: this.parseXDoc(comment.text)
     }
   }
 
-  private parseMarkdown = (token: Token): RemarkNode => {
+  /**
+   * Parse multiple comments within a file.
+   */
+  parseFile = () => {
+    const comments = (new XDocCommentParser(this.source))
+      .parse()
+      .filter(this.filter);
+    return comments.map(token => ({
+      markdown: this.parseMarkdown(token.text),
+      documentation: this.parseXDoc(token.text)
+    }))
+  }
+
+  private parseMarkdown = (source: string): RemarkNode => {
     let ast = remark()
       .data('settings', this.options.markdown.remark)
-      .parse(token.text) as RemarkNode;
+      .parse(source) as RemarkNode;
     ast.children = ast.children.map((node, index) => {
       if (node.type === 'heading') {
         node.depth = this.options.markdown.headingDepth;

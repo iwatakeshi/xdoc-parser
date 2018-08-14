@@ -47,18 +47,31 @@ Example program:
 ```js
 // ...
 const xdoc = require('xdoc-parser');
-const ast = xdoc(fs.readFileSync('...'));
+const ast = xdoc(fs.readFileSync('...')).parseFile();
 console.log(JSON.stringify(ast, null, 2));
 // ...
 ```
 
-In the example above, `xdoc()` will return an object containing `markdown` and `documentation`:
+In the example above, `xdoc()` will return an array containing an object with `markdown` and `documentation`:
 ```ts
-{
-  markdown: RemarkNode[],
+[{
+  markdown: RemarkNode,
   documentation: Partial<DocumentationNode>
-}
+}]
 ```
+
+If you are parsing a single comment, then use the `parse` method as shown below:
+
+Example program:
+```js
+// ...
+const xdoc = require('xdoc-parser');
+const ast = xdoc(fs.readFileSync('...')).parse();
+console.log(JSON.stringify(ast, null, 2));
+// ...
+```
+
+**Note**: If you pass a file with multiple comments, `parse` will only parse the first comment in the file.
 
 You may also access the core parser class (or other classes) and simply parse the XDoc syntax if that's all you care for. For example:
 
@@ -72,6 +85,36 @@ const parse = (source) => new XDocASTVisitor(generate(source)).visit();
 const ast = parse('@tag id: type - description {@inline description}');
 console.log(JSON.stringify(ast, null, 2));
 ```
+
+## Documentation Style
+
+There are two ways that you can write your documentations. The first way is to write in JSDoc-style
+and the second way is to write in XDoc style:
+
+### JSDoc Style
+```js
+/**
+ * Description
+ * @tag id: string
+ */
+```
+
+### XDoc Style
+
+```js
+/**
+ * Description
+ * 
+ * # API
+ * 
+ * ```
+ * @tag id: string
+ * ```
+ */
+```
+
+**Note**: Regardless of style used, `xdoc()` will parse only the annotations within a comment. Also, the type of comment does not matter. For example, `# comment` or `""" comment """` should work.
+
 
 ## Documentation
 

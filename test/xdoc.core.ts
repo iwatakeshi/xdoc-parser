@@ -5,7 +5,8 @@ import { TagNode, DocumentationNode, createDocumentationNode, createBodyNode, cr
 
 /* Helpers */
 const equal = chai.assert.deepEqual;
-const source = FS.readFileSync(`${process.cwd()}/test/markdown.comment.txt`, 'utf-8');
+const md1 = FS.readFileSync(`${process.cwd()}/test/markdown.comment.txt`, 'utf-8');
+const md2 = FS.readFileSync(`${process.cwd()}/test/markdown2.comment.txt`, 'utf-8');
 const xdoc = (source: string) => (new XDocParser(source).parse());
 
 const documentation = (annotations: TagNode[]): Partial<DocumentationNode> => createDocumentationNode(
@@ -17,10 +18,29 @@ const documentation = (annotations: TagNode[]): Partial<DocumentationNode> => cr
 
 describe('XDoc Parser', () => {
   describe('parse markdown', () => {
-    describe('parse xdoc within markdown', () => {
+    describe('parse xdoc within markdown (XDoc style)', () => {
 
       it('should parse @tag id', () => equal(
-        xdoc(source).documentation,
+        xdoc(md1).documentation,
+        documentation([
+          createTagNode(
+            createTagNameNode(
+              createIdentifierNode('tag')
+            ),
+            createTagIdentifierNode(
+              createIdentifierNode('id'),
+            ),
+            null,
+            null,
+            null
+          )])
+      ));
+    });
+
+    describe('parse xdoc within markdown (JSDoc style)', () => {
+
+      it('should parse @tag id', () => equal(
+        xdoc(md2).documentation,
         documentation([
           createTagNode(
             createTagNameNode(
