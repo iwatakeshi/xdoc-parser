@@ -25,7 +25,25 @@ export default class XDocParser {
     private options;
     constructor(source: string, options?: Partial<XDocParserOptions>);
     readonly source: string;
-    parse: () => RemarkNode[];
+    /**
+     * Parse a single comment.
+     *
+     * @return: {
+     *  markdown: RemarkNode[],
+     *  documentation: Partial<DocumentationNode>
+     * }
+     */
+    parse: () => {
+        markdown: RemarkNode;
+        documentation: Partial<import("./XDocASTNode").DocumentationNode>;
+    };
+    /**
+     * Parse multiple comments within a file.
+     */
+    parseFile: () => {
+        markdown: RemarkNode;
+        documentation: Partial<import("./XDocASTNode").DocumentationNode>;
+    }[];
     private parseMarkdown;
     private isAPI;
     private parseXDoc;
