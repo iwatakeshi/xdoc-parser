@@ -1,3 +1,15 @@
+# [3.0.0](https://github.com/iwatakeshi/xdoc-parser/compare/v2.1.6...v3.0.0) (2018-08-14)
+
+
+### Breaking
+
+* AST returns an object instead of an array. ([9ffe87b](https://github.com/iwatakeshi/xdoc-parser/commit/9ffe87b))
+
+
+### BREAKING CHANGES
+
+* The documentation is no longer within Remark's AST.
+
 ## [2.1.6](https://github.com/iwatakeshi/xdoc-parser/compare/v2.1.5...v2.1.6) (2018-08-07)
 
 ## [2.1.5](https://github.com/iwatakeshi/xdoc-parser/compare/v2.1.4...v2.1.5) (2018-08-06)
