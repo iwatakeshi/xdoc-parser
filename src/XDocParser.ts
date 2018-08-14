@@ -53,14 +53,16 @@ export default class XDocParser {
   }
 
   parse = () => {
-    return (new XDocCommentParser(this.source_))
-      .parse()
-      .filter(this.filter)
-      .map(this.parseMarkdown)
+    return {
+      markdown: (new XDocCommentParser(this.source))
+        .parse()
+        .filter(this.filter)
+        .map(this.parseMarkdown),
+      documentation: this.parseXDoc(this.source)
+    }
   }
 
   private parseMarkdown = (token: Token): RemarkNode => {
-    // console.log(marked.lexer(token.text, this.options.marked));
     let ast = remark()
       .data('settings', this.options.markdown.remark)
       .parse(token.text) as RemarkNode;
@@ -71,22 +73,24 @@ export default class XDocParser {
       if (node.type === 'code') {
         if (this.isAPI(ast.children[index - 1])) {
           if (!node.lang) node.lang = 'xdoc';
-          return this.parseXDoc(node)
+          return node;
         }
       }
       return node;
     })
     return ast;
   }
+
   private isAPI = (node) => {
     return node && node.type === "heading" && node.children[0].value.toLowerCase() === "api";
   }
-  private parseXDoc = (node) => {
-    const documentation = (new XDocASTGenerator(node.value)).generate();
-    node['xdoc'] = (new XDocASTVisitor(documentation, this.options.visitor)
+
+  private parseXDoc = (source: string) => {
+    const XDocRegex = /@(\w+)([^{[(\n]*)?([\{\[\(][\s\S]*[\}\]\)]([\s]*(=|-)>.*)?)?([\s]*-(.)*)?/gmi;
+    const documentation = (new XDocASTGenerator(source.match(XDocRegex).join('\n'))).generate();
+    return (new XDocASTVisitor(documentation, this.options.visitor)
       .visit()
     );
-    return node;
   }
 
   private filter = (token: Token) => {

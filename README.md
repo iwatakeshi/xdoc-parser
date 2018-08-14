@@ -47,13 +47,17 @@ Example program:
 ```js
 // ...
 const xdoc = require('xdoc-parser');
-// Returns a Remark.js AST with an 'xdoc' property attached to each
-// child whose type is 'code'. Note that only the code blocks after
-// a heading, 'API', as well as any code block with
-// a language set to 'xdoc' would be parsed.
 const ast = xdoc(fs.readFileSync('...'));
 console.log(JSON.stringify(ast, null, 2));
 // ...
+```
+
+In the example above, `xdoc()` will return an object containing `markdown` and `documentation`:
+```ts
+{
+  markdown: RemarkNode[],
+  documentation: Partial<DocumentationNode>
+}
 ```
 
 You may also access the core parser class (or other classes) and simply parse the XDoc syntax if that's all you care for. For example:

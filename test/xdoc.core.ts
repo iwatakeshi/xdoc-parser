@@ -7,10 +7,6 @@ import { TagNode, DocumentationNode, createDocumentationNode, createBodyNode, cr
 const equal = chai.assert.deepEqual;
 const source = FS.readFileSync(`${process.cwd()}/test/markdown.comment.txt`, 'utf-8');
 const xdoc = (source: string) => (new XDocParser(source).parse());
-const getCode = () => xdoc(source).map(ast => {
-  let code = ast.children.filter(node => node.type === 'code')[0];
-  return code;
-})[0];
 
 const documentation = (annotations: TagNode[]): Partial<DocumentationNode> => createDocumentationNode(
   createBodyNode(
@@ -21,14 +17,10 @@ const documentation = (annotations: TagNode[]): Partial<DocumentationNode> => cr
 
 describe('XDoc Parser', () => {
   describe('parse markdown', () => {
-    describe('parse xdoc code block', () => {
-      it('shoud add an "xdoc" property to remark\'s markdown AST', () => {
-        let code = getCode();
-        chai.assert.exists(code['xdoc']);
-      });
+    describe('parse xdoc within markdown', () => {
 
       it('should parse @tag id', () => equal(
-        getCode()['xdoc'],
+        xdoc(source).documentation,
         documentation([
           createTagNode(
             createTagNameNode(
