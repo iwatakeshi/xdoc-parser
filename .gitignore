@@ -62,4 +62,5 @@ typings/
 
 # Auxillary files
 grammar/.antlr/
+grammar/*.java
 *.sqlite
