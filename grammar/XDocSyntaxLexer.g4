@@ -284,10 +284,16 @@ NullLiteral
 
 /* Tom Tokens */
 
+EXTENDS
+	: 'extends'
+	;
+
 ID
-  : {
-    if(this.text == "true" || this.text == "false") this.type = XDocSyntaxLexer.BooleanLiteral;
+  : /* Prevent the lexer from identifying certain tokens as ID*/
+	{
+    if (this.text == "true" || this.text == "false") this.type = XDocSyntaxLexer.BooleanLiteral;
     if (this.text == "null" || this.text == "undefined") this.type = XDocSyntaxLexer.NullLiteral;
+		if (this.text == "extends") this.type = XDocSyntaxLexer.EXTENDS;
 
   } LETTER (LETTER | DIGIT)*
 	;

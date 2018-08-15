@@ -1,6 +1,6 @@
 import * as Parser from './XDocSyntaxParser';
 import './XDocSyntaxParserVisitor';
-import { ArrayTypeNode, BodyNode, DescriptionNode, DocumentationNode, ExpressionNode, FormalParameterSequenceNode, IdentifierNode, InlineTagNode, KeywordNode, LambdaExpressionNode, LambdaTypeNode, LiteralExpressionNode, ObjectExpressionNode, ObjectPairExpressionNode, ParameterNode, ParenthesizedExpressionNode, PropertyTagIdentifierNode, TagIdentifierNode, TagNameNode, TagNode, TupleTypeNode, TypeNode, UnaryExpressionNode, PropertyIdentifierNode, ParenthesizedTypeNode, PrimaryTypeNode, UnaryTypeNode, ObjectTypeNode } from './XDocASTNode';
+import { ArrayTypeNode, BodyNode, DescriptionNode, DocumentationNode, ExpressionNode, FormalParameterSequenceNode, IdentifierNode, InlineTagNode, KeywordNode, LambdaExpressionNode, LambdaTypeNode, LiteralExpressionNode, ObjectExpressionNode, ObjectPairExpressionNode, ParameterNode, ParenthesizedExpressionNode, PropertyTagIdentifierNode, TagIdentifierNode, TagNameNode, TagNode, TupleTypeNode, TypeNode, UnaryExpressionNode, PropertyIdentifierNode, ParenthesizedTypeNode, PrimaryTypeNode, UnaryTypeNode, ObjectTypeNode, TupleExtendedTypeNode } from './XDocASTNode';
 export interface XDocASTVisitorOptions {
     showNodeText: boolean;
 }
@@ -38,7 +38,7 @@ export default class XDocASTVisitor {
     visit: () => Partial<DocumentationNode>;
     visitDocumentation: (context: Parser.DocumentationContext) => Partial<DocumentationNode>;
     visitBody: (context: Parser.BodyContext) => Partial<BodyNode>;
-    visitAnnotations: (context: Parser.AnnotationsContext, options: XDocASTVisitorOptions) => Partial<Partial<TagNode>[]> | Partial<undefined[]>;
+    visitAnnotations: (context: Parser.AnnotationsContext) => Partial<Partial<TagNode>[]> | Partial<undefined[]>;
     visitTag: (context: Parser.TagContext) => Partial<TagNode>;
     visitTagName: (context: Parser.TagNameContext) => Partial<TagNameNode>;
     visitTagIdentifier: (context: Parser.TagIdentifierContext) => Partial<TagIdentifierNode>;
@@ -52,7 +52,7 @@ export default class XDocASTVisitor {
     visitParameters: (contexts: Parser.ParameterContext[]) => Partial<ParameterNode>[];
     visitParameter: (context: Parser.ParameterContext) => Partial<ParameterNode>;
     visitTuple: (context: Parser.TupleTypeContext) => Partial<TupleTypeNode>;
-    visitTupleSequenceType: (context: Parser.TupleTypeSequenceContext) => undefined[] | Partial<TypeNode>[];
+    visitTupleSequenceOrExtendedTypes: (context: Parser.TupleTypeSequenceContext) => undefined[] | (Partial<TypeNode> | Partial<TupleExtendedTypeNode>)[];
     visitPrimaryType: (context: Parser.PrimaryTypeContext) => Partial<PrimaryTypeNode>;
     visitIdentifierOrKeyword: (context: Parser.IdentifierOrKeywordContext) => Partial<IdentifierNode> | Partial<KeywordNode>;
     visitKeyword: (context: Parser.KeywordContext) => KeywordNode;

@@ -1,15 +1,16 @@
 import * as chai from 'chai';
 import XDocASTVisitor from "../src/XDocASTVisitor";
 import XDocASTGenerator from '../src/XDocASTGenerator';
-import { createDocumentationNode, createTagNode, createTagNameNode, createIdentifierNode, createBodyNode, TagNode, DocumentationNode, createDescriptionNode, createTagIdentifierNode, createTypeNode, createPrimaryTypeNode, createUnionTypeNode, createIntersectTypeNode, createLambdaTypeNode, createParameterNode, createFormalParemeterSequenceNode, createTupleTypeNode, createParenthesizedTypeNode, createUnaryTypeNode, createPropertyIdentifierNode, createObjectTypeNode, createObjectPairTypeNode, createArrayTypeNode, createExpressionNode, createLiteralExpressionNode, createUnaryExpressionNode, createBinaryExpressionNode, createArrayExpressionNode, createObjectExpressionNode, createObjectPairExpressionNode, createLambdaExpressionNode, createParenthesizedExpressioneNode, createInlineTagNode } from '../src/XDocASTNode';
+import { createDocumentationNode, createTagNode, createTagNameNode, createIdentifierNode, createBodyNode, TagNode, DocumentationNode, createDescriptionNode, createTagIdentifierNode, createTypeNode, createPrimaryTypeNode, createUnionTypeNode, createIntersectTypeNode, createLambdaTypeNode, createParameterNode, createFormalParemeterSequenceNode, createTupleTypeNode, createParenthesizedTypeNode, createUnaryTypeNode, createPropertyIdentifierNode, createObjectTypeNode, createObjectPairTypeNode, createArrayTypeNode, createExpressionNode, createLiteralExpressionNode, createUnaryExpressionNode, createBinaryExpressionNode, createArrayExpressionNode, createObjectExpressionNode, createObjectPairExpressionNode, createLambdaExpressionNode, createParenthesizedExpressioneNode, createInlineTagNode, createTupleExtendedTypeNode } from '../src/XDocASTNode';
 import * as FS from 'fs';
 import { DocumentationContext } from '../src/XDocSyntaxParser';
+import { type } from 'os';
 
 /* Helpers */
 const equal = chai.assert.deepEqual;
 const generate = (source) => new XDocASTGenerator(source).generate();
-const parse = (source: string) => 
-new XDocASTVisitor(generate(source)).visit();
+const parse = (source: string) =>
+  new XDocASTVisitor(generate(source)).visit();
 
 const documentation = (annotations: TagNode[]): Partial<DocumentationNode> => createDocumentationNode(
   createBodyNode(
@@ -924,6 +925,76 @@ describe('XDoc Syntax Parser (Tom)', () => {
                   null,
                   [
                     createTypeNode(
+                      createPrimaryTypeNode(
+                        createIdentifierNode('type')
+                      )
+                    ),
+                    createTypeNode(
+                      createPrimaryTypeNode(
+                        createIdentifierNode('type')
+                      )
+                    )
+                  ]
+                )
+              ),
+              null,
+              createDescriptionNode('description')
+            )])
+        ));
+
+        it('should parse @tag id: <type extends type, type>', () => equal(
+          parse('@tag id: <type extends type, type>'),
+          documentation([
+            createTagNode(
+              createTagNameNode(
+                createIdentifierNode('tag')
+              ),
+              createTagIdentifierNode(
+                createIdentifierNode('id'),
+              ),
+              createTypeNode(
+                createTupleTypeNode(
+                  null,
+                  [
+                    createTupleExtendedTypeNode(
+                      createPrimaryTypeNode(
+                        createIdentifierNode('type')
+                      ),
+                      createPrimaryTypeNode(
+                        createIdentifierNode('type')
+                      )
+                    ),
+                    createTypeNode(
+                      createPrimaryTypeNode(
+                        createIdentifierNode('type')
+                      )
+                    )
+                  ]
+                )
+              ),
+              null,
+              null
+            )])
+        ));
+
+        it('should parse @tag id: <type extends type, type> - description', () => equal(
+          parse('@tag id: <type extends type, type> - description'),
+          documentation([
+            createTagNode(
+              createTagNameNode(
+                createIdentifierNode('tag')
+              ),
+              createTagIdentifierNode(
+                createIdentifierNode('id'),
+              ),
+              createTypeNode(
+                createTupleTypeNode(
+                  null,
+                  [
+                    createTupleExtendedTypeNode(
+                      createPrimaryTypeNode(
+                        createIdentifierNode('type')
+                      ),
                       createPrimaryTypeNode(
                         createIdentifierNode('type')
                       )
@@ -2907,7 +2978,7 @@ describe('XDoc Syntax Parser (Tom)', () => {
                     createLiteralExpressionNode('string', '"a"'),
                     createObjectExpressionNode([
                       createObjectPairExpressionNode(
-                         createLiteralExpressionNode('string', '"b"'),
+                        createLiteralExpressionNode('string', '"b"'),
                         createLiteralExpressionNode('string', '"c"')
                       )
                     ])

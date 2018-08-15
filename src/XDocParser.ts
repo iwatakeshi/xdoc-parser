@@ -84,6 +84,10 @@ export default class XDocParser {
     }))
   }
 
+  parseSyntax = () => {
+    return this.parseXDoc(this.source);
+  }
+
   private parseMarkdown = (source: string): RemarkNode => {
     let ast = remark()
       .data('settings', this.options.markdown.remark)

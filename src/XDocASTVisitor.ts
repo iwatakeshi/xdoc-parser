@@ -65,6 +65,8 @@ import {
   PrimaryTypeNode,
   UnaryTypeNode,
   ObjectTypeNode,
+  createTupleExtendedTypeNode,
+  TupleExtendedTypeNode,
 } from './XDocASTNode';
 
 
@@ -129,7 +131,7 @@ export default class XDocASTVisitor {
   ): Partial<BodyNode> => {
     if (context.annotations()) {
       return createBodyNode(
-        this.visitAnnotations(context.annotations(), this.options),
+        this.visitAnnotations(context.annotations()),
         this.options.showNodeText ? context.text : undefined
       );
     }
@@ -137,7 +139,6 @@ export default class XDocASTVisitor {
 
   visitAnnotations = (
     context: Parser.AnnotationsContext,
-    options: XDocASTVisitorOptions
   ): Partial<AnnotationsNode> => {
     if (context.tag()) {
       return (context.tag() || []).map(this.visitTag)
@@ -245,8 +246,8 @@ export default class XDocASTVisitor {
     if (context.PIPE()) {
       return createTypeNode(
         createIntersectTypeNode(
-          this.visitType(context instanceof Parser.TypeContext ? context.type(0): context.notArrayType(0)),
-          this.visitType(context instanceof Parser.TypeContext ? context.type(1): context.notArrayType(1)),
+          this.visitType(context instanceof Parser.TypeContext ? context.type(0) : context.notArrayType(0)),
+          this.visitType(context instanceof Parser.TypeContext ? context.type(1) : context.notArrayType(1)),
           this.options.showNodeText ? context.text : undefined
         ),
         optional,
@@ -257,8 +258,8 @@ export default class XDocASTVisitor {
     if (context.AMP()) { // Unions
       return createTypeNode(
         createUnionTypeNode(
-          this.visitType(context instanceof Parser.TypeContext ? context.type(0): context.notArrayType(0)),
-          this.visitType(context instanceof Parser.TypeContext ? context.type(1): context.notArrayType(1)),
+          this.visitType(context instanceof Parser.TypeContext ? context.type(0) : context.notArrayType(0)),
+          this.visitType(context instanceof Parser.TypeContext ? context.type(1) : context.notArrayType(1)),
           this.options.showNodeText ? context.text : undefined
         ),
         optional,
@@ -378,14 +379,82 @@ export default class XDocASTVisitor {
     }
 
     if (context.tupleTypeSequence()) {
-      types = this.visitTupleSequenceType(context.tupleTypeSequence());
+      types = this.visitTupleSequenceOrExtendedTypes(context.tupleTypeSequence());
     }
 
     return createTupleTypeNode(identifier, types, this.options.showNodeText ? context.text : undefined);
   }
 
-  visitTupleSequenceType = (context: Parser.TupleTypeSequenceContext): Partial<TypeNode>[] | undefined[] => {
-    return (context.type() || []).map(type => this.visitType(type));
+  visitTupleSequenceOrExtendedTypes = (context: Parser.TupleTypeSequenceContext): Partial<TypeNode | TupleExtendedTypeNode>[] | undefined[] => {
+    let types = [];
+
+    const mergeSequence = () => {
+      types = [
+        ...types, 
+        ..._.flattenDeep(
+          context.tupleTypeSequence().map(this.visitTupleSequenceOrExtendedTypes.bind(this)))
+      ]
+    }
+
+    if (context.EXTENDS()) {
+      types.push(createTupleExtendedTypeNode(
+        this.visitPrimaryType(context.primaryType(0)),
+        this.visitPrimaryType(context.primaryType(1)),
+        this.options.showNodeText ? context.text : undefined
+      ));
+
+      if (context.tupleTypeSequence()) {
+        mergeSequence();
+      }
+
+      return types;
+    }
+
+    if (context.PIPE()) {
+      types.push(createIntersectTypeNode(
+        createTypeNode(
+          this.visitPrimaryType(context.primaryType(0))
+        ),
+        createTypeNode(
+          this.visitPrimaryType(context.primaryType(1))
+        ),
+        this.options.showNodeText ? context.text : undefined
+      ));
+
+      if (context.tupleTypeSequence()) {
+        mergeSequence()
+      }
+
+      return types;
+    }
+
+    if (context.AMP()) {
+      types.push(createUnionTypeNode(
+        createTypeNode(
+          this.visitPrimaryType(context.primaryType(0))
+        ),
+        createTypeNode(
+          this.visitPrimaryType(context.primaryType(1))
+        ),
+        this.options.showNodeText ? context.text : undefined
+      ));
+
+      if (context.tupleTypeSequence()) {
+        mergeSequence();
+      }
+
+      return types;
+    }
+
+    if (context.primaryType().length === 1) {
+      types = context.primaryType()
+        .map(primary => createTypeNode(this.visitPrimaryType(primary)))
+
+      if (context.tupleTypeSequence()) {
+        mergeSequence();
+      }
+      return types;
+    }
   }
 
   visitPrimaryType = (context: Parser.PrimaryTypeContext): Partial<PrimaryTypeNode> => {

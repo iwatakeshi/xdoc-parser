@@ -15,6 +15,7 @@ export declare class XDocSyntaxParser extends Parser {
     static readonly CharacterLiteral: number;
     static readonly StringLiteral: number;
     static readonly NullLiteral: number;
+    static readonly EXTENDS: number;
     static readonly ID: number;
     static readonly NEWLINE: number;
     static readonly SPACE: number;
@@ -163,6 +164,7 @@ export declare class XDocSyntaxParser extends Parser {
     private static readonly _serializedATNSegments;
     private static readonly _serializedATNSegment0;
     private static readonly _serializedATNSegment1;
+    private static readonly _serializedATNSegment2;
     static readonly _serializedATN: string;
     static __ATN: ATN;
     static readonly _ATN: ATN;
@@ -372,12 +374,17 @@ export declare class TupleTypeContext extends ParserRuleContext {
     accept<Result>(visitor: XDocSyntaxParserVisitor<Result>): Result;
 }
 export declare class TupleTypeSequenceContext extends ParserRuleContext {
-    type(): TypeContext[];
-    type(i: number): TypeContext;
+    primaryType(): PrimaryTypeContext[];
+    primaryType(i: number): PrimaryTypeContext;
     SPACE(): TerminalNode[];
     SPACE(i: number): TerminalNode;
     COMMA(): TerminalNode[];
     COMMA(i: number): TerminalNode;
+    tupleTypeSequence(): TupleTypeSequenceContext[];
+    tupleTypeSequence(i: number): TupleTypeSequenceContext;
+    EXTENDS(): TerminalNode | undefined;
+    AMP(): TerminalNode | undefined;
+    PIPE(): TerminalNode | undefined;
     constructor(parent: ParserRuleContext, invokingState: number);
     readonly ruleIndex: number;
     enterRule(listener: XDocSyntaxParserListener): void;

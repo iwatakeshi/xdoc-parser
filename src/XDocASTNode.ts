@@ -49,7 +49,7 @@ export function createDocumentationNode(
   body: Partial<BodyNode>,
   text?: string
 ): Partial<DocumentationNode> {
-  return { documentation: join(sanitize({ body }), body.text ? { text: body.text }: {} ) }
+  return { documentation: join(sanitize({ body }), body.text ? { text: body.text } : {}) }
 }
 
 export interface DocumentationNode {
@@ -86,7 +86,7 @@ export function createTagNode(
   description: Partial<DescriptionNode>,
   text?: string
 ): TagNode {
-  const object = Object.assign({}, name, identifier, { type }, expression, description);
+  const object = Object.assign({}, name, identifier, type, expression, description);
   return join(sanitize(object), text ? { text } : {});
 }
 
@@ -348,15 +348,30 @@ export interface ParameterNode {
 
 export function createTupleTypeNode(
   identifier: Partial<IdentifierNode>,
-  types: Partial<TypeNode>[] | undefined[],
+  types: Partial<TypeNode | TupleExtendedTypeNode>[] | undefined[],
   text?: string
 ): Partial<TupleTypeNode> {
-  return join(sanitize({ identifier, types }), text ? { text } : {})
+  return { tuple: join(sanitize({ identifier, types }), text ? { text } : {}) }
 }
 
 export interface TupleTypeNode {
-  identifier?: Partial<IdentifierNode>,
-  types: Partial<TypeNode>[] | undefined[],
+  tuple: {
+    identifier?: Partial<IdentifierNode>,
+    types?: Partial<TypeNode | TupleExtendedTypeNode>[] | undefined[],
+    text?: string
+  }
+}
+
+export function createTupleExtendedTypeNode(
+  type: Partial<PrimaryTypeNode>,
+  heritage: Partial<PrimaryTypeNode>, text?: string
+): TupleExtendedTypeNode {
+  return join(sanitize({ type, heritage }), text ? { text } : {})
+}
+
+export interface TupleExtendedTypeNode {
+  type?: Partial<PrimaryTypeNode>
+  heritage?: Partial<PrimaryTypeNode>
   text?: string
 }
 

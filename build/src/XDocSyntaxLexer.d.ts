@@ -11,6 +11,7 @@ export declare class XDocSyntaxLexer extends Lexer {
     static readonly CharacterLiteral: number;
     static readonly StringLiteral: number;
     static readonly NullLiteral: number;
+    static readonly EXTENDS: number;
     static readonly ID: number;
     static readonly NEWLINE: number;
     static readonly SPACE: number;

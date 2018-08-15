@@ -44,6 +44,7 @@ export default class XDocParser {
         markdown: RemarkNode;
         documentation: Partial<import("../../../../../../Users/takeshi/Documents/GitHub/xdoc-parser/src/XDocASTNode").DocumentationNode>;
     }[];
+    parseSyntax: () => Partial<import("../../../../../../Users/takeshi/Documents/GitHub/xdoc-parser/src/XDocASTNode").DocumentationNode>;
     private parseMarkdown;
     private isAPI;
     private parseXDoc;

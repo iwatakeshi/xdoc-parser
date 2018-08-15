@@ -104,7 +104,10 @@ tupleType
   ;
 
 tupleTypeSequence
-  : type SPACE? (COMMA SPACE? type)*
+  : primaryType SPACE? (COMMA SPACE? tupleTypeSequence)*
+  | primaryType SPACE? EXTENDS SPACE? primaryType SPACE? (COMMA SPACE? tupleTypeSequence)*
+  | primaryType SPACE? AMP SPACE? primaryType SPACE? (COMMA SPACE? tupleTypeSequence)*
+  | primaryType SPACE? PIPE SPACE? primaryType SPACE? (COMMA SPACE? tupleTypeSequence)*
   ;
 
 primaryType 

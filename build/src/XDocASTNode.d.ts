@@ -169,10 +169,18 @@ export interface ParameterNode {
     type?: Partial<TypeNode>;
     text?: string;
 }
-export declare function createTupleTypeNode(identifier: Partial<IdentifierNode>, types: Partial<TypeNode>[] | undefined[], text?: string): Partial<TupleTypeNode>;
+export declare function createTupleTypeNode(identifier: Partial<IdentifierNode>, types: Partial<TypeNode | TupleExtendedTypeNode>[] | undefined[], text?: string): Partial<TupleTypeNode>;
 export interface TupleTypeNode {
-    identifier?: Partial<IdentifierNode>;
-    types: Partial<TypeNode>[] | undefined[];
+    tuple: {
+        identifier?: Partial<IdentifierNode>;
+        types?: Partial<TypeNode | TupleExtendedTypeNode>[] | undefined[];
+        text?: string;
+    };
+}
+export declare function createTupleExtendedTypeNode(type: Partial<PrimaryTypeNode>, heritage: Partial<PrimaryTypeNode>, text?: string): TupleExtendedTypeNode;
+export interface TupleExtendedTypeNode {
+    type?: Partial<PrimaryTypeNode>;
+    heritage?: Partial<PrimaryTypeNode>;
     text?: string;
 }
 export declare function createPrimaryTypeNode(primary: Partial<OptionalIdentifierNode> | Partial<(IdentifierNode | KeywordNode)> | Partial<PropertyIdentifierNode>, text?: string): Partial<PrimaryTypeNode>;
