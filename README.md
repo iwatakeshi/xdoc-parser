@@ -1,5 +1,6 @@
 # xdoc-parser
 
+[![NPM](https://img.shields.io/npm/v/xdoc-parser.svg)](https://npmjs.com/package/xdoc-parser)
 [![Build Status](https://travis-ci.org/iwatakeshi/xdoc-parser.svg?branch=master)](https://travis-ci.org/iwatakeshi/xdoc-parser)
 [![Commitizen friendly](https://img.shields.io/badge/commitizen-friendly-brightgreen.svg)](http://commitizen.github.io/cz-cli/)
 [![FOSSA Status](https://app.fossa.io/api/projects/git%2Bgithub.com%2Fiwatakeshi%2Fxdoc-parser.svg?type=shield)](https://app.fossa.io/projects/git%2Bgithub.com%2Fiwatakeshi%2Fxdoc-parser?ref=badge_shield)

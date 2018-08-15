@@ -59,7 +59,7 @@ export default class XDocASTVisitor {
     visitParenthesizedType: (context: Parser.ParenthesizedTypeContext, optional?: boolean) => Partial<ParenthesizedTypeNode>;
     visitUnaryType: (context: Parser.UnaryTypeContext) => Partial<UnaryTypeNode>;
     visitObjectType: (context: Parser.ObjectTypeContext) => Partial<ObjectTypeNode>;
-    visitObjectPairSequenceType: (context: Parser.ObjectPairSequenceTypeContext) => Partial<import("./XDocASTNode").ObjectPairTypeNode>[];
+    visitObjectPairSequenceType: (context: Parser.ObjectPairSequenceTypeContext) => Partial<import("../../../../../../Users/takeshi/Documents/GitHub/xdoc-parser/src/XDocASTNode").ObjectPairTypeNode>[];
     visitArrayType: (context: Parser.ArrayTypeContext) => Partial<ArrayTypeNode>;
     visitPropertyIdentifier: (context: Parser.PropertyIdentifierContext) => Partial<PropertyIdentifierNode>;
     visitOptionalIdentifier: (context: Parser.OptionalIdentifierContext) => Partial<IdentifierNode>;
