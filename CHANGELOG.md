@@ -1,3 +1,5 @@
+## [3.2.1](https://github.com/iwatakeshi/xdoc-parser/compare/v3.2.0...v3.2.1) (2018-08-16)
+
 # [3.2.0](https://github.com/iwatakeshi/xdoc-parser/compare/v3.1.2...v3.2.0) (2018-08-15)
 
 ## [3.1.2](https://github.com/iwatakeshi/xdoc-parser/compare/v3.1.1...v3.1.2) (2018-08-14)
