@@ -113,7 +113,8 @@ export default class XDocParser {
 
   private parseXDoc = (source: string) => {
     const XDocRegex = /@(\w+)([^{[(\n]*)?([\{\[\(][\s\S]*[\}\]\)]([\s]*(=|-)>.*)?)?([\s]*-(.)*)?/gmi;
-    const documentation = (new XDocASTGenerator(source.match(XDocRegex).join('\n'))).generate();
+    const syntaxes = source.match(XDocRegex) || [''];
+    const documentation = (new XDocASTGenerator(syntaxes.join('\n'))).generate();
     return (new XDocASTVisitor(documentation, this.options.visitor)
       .visit()
     );

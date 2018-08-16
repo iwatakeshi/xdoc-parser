@@ -35,16 +35,16 @@ export default class XDocParser {
      */
     parse: () => {
         markdown: RemarkNode;
-        documentation: Partial<import("../../../../../../Users/takeshi/Documents/GitHub/xdoc-parser/src/XDocASTNode").DocumentationNode>;
+        documentation: Partial<import("./XDocASTNode").DocumentationNode>;
     };
     /**
      * Parse multiple comments within a file.
      */
     parseFile: () => {
         markdown: RemarkNode;
-        documentation: Partial<import("../../../../../../Users/takeshi/Documents/GitHub/xdoc-parser/src/XDocASTNode").DocumentationNode>;
+        documentation: Partial<import("./XDocASTNode").DocumentationNode>;
     }[];
-    parseSyntax: () => Partial<import("../../../../../../Users/takeshi/Documents/GitHub/xdoc-parser/src/XDocASTNode").DocumentationNode>;
+    parseSyntax: () => Partial<import("./XDocASTNode").DocumentationNode>;
     private parseMarkdown;
     private isAPI;
     private parseXDoc;
