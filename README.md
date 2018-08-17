@@ -91,9 +91,9 @@ console.log(JSON.stringify(ast, null, 2));
 ## Documentation Style
 
 There are two ways that you can write your documentations. The first way is to write in JSDoc-style
-and the second way is to write in XDoc style:
+and the second way is to write in XDoc-style:
 
-### JSDoc Style
+### JSDoc-style
 ```js
 /**
  * Description
@@ -101,7 +101,7 @@ and the second way is to write in XDoc style:
  */
 ```
 
-### XDoc Style
+### XDoc-style
 
 ```js
 /**
