@@ -75,7 +75,7 @@ console.log(JSON.stringify(ast, null, 2));
 
 **Note**: If you pass a file with multiple comments, `parse()` will only parse the first comment in the file.
 
-Finally, to parse only the syntax and the Markdown comments, use the `parseSyntax` method as shown below:
+Finally, to parse only the syntax and not the Markdown comments, use the `parseSyntax` method as shown below:
 
 ```js
 const xdoc = require('xdoc-parser');
