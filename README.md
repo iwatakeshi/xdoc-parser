@@ -73,7 +73,15 @@ console.log(JSON.stringify(ast, null, 2));
 // ...
 ```
 
-**Note**: If you pass a file with multiple comments, `parse` will only parse the first comment in the file.
+**Note**: If you pass a file with multiple comments, `parse()` will only parse the first comment in the file.
+
+Finally, to parse only the syntax and not the Markdown comments, use the `parseSyntax` method as shown below:
+
+```js
+const xdoc = require('xdoc-parser');
+const ast = xdoc('@tag id: type').parse();
+console.log(JSON.stringify(ast, null, 2));
+```
 
 You may also access the core parser class (or other classes) and simply parse the XDoc syntax if that's all you care for. For example:
 
@@ -86,6 +94,12 @@ const generate = (source) => new XDocASTGenerator(source).generate();
 const parse = (source) => new XDocASTVisitor(generate(source)).visit();
 const ast = parse('@tag id: type - description {@inline description}');
 console.log(JSON.stringify(ast, null, 2));
+```
+
+**Note**: `xdoc-parser` is written in Typescript. Thus, you may easily import it as follows:
+
+```ts
+import xdoc from 'xdoc-parser'
 ```
 
 ## Documentation Style
